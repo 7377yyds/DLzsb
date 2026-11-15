@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#061c28">
+<title>7377斗罗大陆专属明细</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #04131f;
+  --panel: rgba(7, 30, 44, .9);
+  --line: rgba(100, 235, 223, .2);
+  --text: #e6faff;
+  --muted: #a1c4cf;
+  --cyan: #61edff;
+  --green: #75ffd0;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  margin: 0;
+  font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+}
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid var(--green); outline-offset: 5px; }
+.background {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 12% 15%, #105f6666, transparent 48%),
+    radial-gradient(ellipse at 90% 35%, #154d9166, transparent 48%),
+    radial-gradient(ellipse at 50% 90%, #075b4566, transparent 50%),
+    #04131f;
+}
+.ring {
+  position: absolute;
+  width: 650px;
+  height: 650px;
+  border: 2px solid #6cf5e74d;
+  border-radius: 50%;
+  box-shadow: 0 0 65px #23dccd22, inset 0 0 65px #23dccd22;
+  animation: rotate 55s linear infinite;
+}
+.ring::before, .ring::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+.ring::before {
+  inset: 22px;
+  border: 7px double #5ddcff55;
+  outline: 1px dashed #8affdd88;
+  outline-offset: 15px;
+}
+.ring::after {
+  inset: 70px;
+  border: 2px dashed #8affdd77;
+  background: repeating-conic-gradient(
+    from 0deg, transparent 0deg 29deg, #6ef5df55 29deg 30deg
+  );
+  mask: radial-gradient(transparent 65%, #000 66%);
+}
+.ring.one { top: -290px; left: calc(50% - 325px); }
+.ring.two {
+  bottom: -250px;
+  right: -330px;
+  width: 850px;
+  height: 850px;
+  border-color: #ac94ff55;
+  animation-direction: reverse;
+}
+.beam {
+  position: absolute;
+  width: 2px;
+  height: 220px;
+  background: linear-gradient(transparent, #80ffe0, transparent);
+  opacity: 0;
+  transform: rotate(35deg);
+  animation: streak 12s linear infinite;
+}
+.beam:nth-of-type(3) { left: 12%; animation-delay: -2s; }
+.beam:nth-of-type(4) { left: 70%; animation-delay: -6s; }
+.beam:nth-of-type(5) { left: 90%; animation-delay: -9s; }
+@keyframes rotate { to { transform: rotate(360deg); } }
+@keyframes streak {
+  0% { top: -250px; opacity: 0; }
+  15%, 65% { opacity: .5; }
+  100% { top: 110%; opacity: 0; }
+}
+@keyframes shine {
+  to { background-position: -200% center; }
+}
+@keyframes glow {
+  50% { text-shadow: 0 0 18px #64ffd88a; }
+}
+.wrap { width: min(1180px, calc(100% - 36px)); margin: auto; }
+.hero { padding: 76px 0 38px; text-align: center; }
+.eyebrow {
+  color: var(--green);
+  font-size: 12px;
+  letter-spacing: 5px;
+  margin: 0 0 18px;
+}
+h1 {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 55px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  line-height: 1.4;
+  background: linear-gradient(110deg, #fff, #64f6df, #70caff, #fff, #64f6df);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shine 7s linear infinite;
+}
+.subtitle {
+  max-width: 880px;
+  margin: 22px auto 0;
+  color: #c1f6ec;
+  font-size: clamp(14px, 2vw, 17px);
+  animation: glow 4s ease-in-out infinite;
+}
+.hero-mark {
+  width: 64px;
+  height: 3px;
+  margin: 26px auto 0;
+  background: var(--green);
+  box-shadow: 0 0 24px var(--green);
+}
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--panel);
+  box-shadow: 0 15px 45px #0003;
+}
+.servers { padding: 26px; }
+.section-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+h2 { margin: 0; font-size: 22px; }
+.hint { margin: 0; color: var(--muted); font-size: 13px; }
+.server-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.server {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(120deg, #0a3d4655, #0b253c88);
+}
+.map {
+  display: inline-block;
+  padding: 2px 10px;
+  margin-bottom: 12px;
+  border: 1px solid #6df5d64d;
+  border-radius: 6px;
+  color: var(--green);
+  font-size: 12px;
+}
+.server h3 { margin: 0 0 8px; font-size: 18px; }
+.ip { display: block; color: #bcecff; font-size: 18px; letter-spacing: .5px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 42px;
+  padding: 8px 17px;
+  border: 1px solid #5be7cd55;
+  border-radius: 9px;
+  background: #123b43;
+  color: var(--text);
+  cursor: pointer;
+  transition: background .2s, border-color .2s, transform .2s;
+}
+.btn:hover { background: #1b5360; border-color: var(--green); transform: translateY(-2px); }
+.primary { background: linear-gradient(110deg, #80f6c9, #69d8fb); color: #052936; font-weight: 700; }
+.primary:hover { background: #9affdf; }
+.steam-note { margin-top: 14px; }
+.portals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0 32px; }
+.portal {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  transition: border-color .2s, transform .2s;
+}
+.portal:hover { border-color: var(--green); transform: translateY(-3px); }
+.portal strong { display: block; font-size: 17px; }
+.portal span { color: var(--muted); font-size: 13px; }
+.portal b { float: right; font-size: 24px; color: var(--green); }
+.toolbar { padding: 22px; margin-bottom: 24px; }
+.search-label { display: block; margin-bottom: 10px; font-weight: 700; }
+.search {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 15px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #031822;
+  color: var(--text);
+}
+.search::placeholder { color: #81a4b2; }
+.nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.nav a {
+  padding: 6px 17px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: #d2f8f1;
+}
+.nav a:hover { background: #174047; }
+.stats { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+.tier-section { overflow: hidden; margin-bottom: 24px; }
+.tier-head {
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(100deg, #14576533, transparent);
+}
+.tier-head h2 { font-size: 20px; }
+.tier-head p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 43px;
+  border: 1px solid currentColor;
+  border-radius: 10px;
+  font-size: 19px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.sp { color: #ffdc8a; background: #a6781822; }
+.ssr { color: #d2b5ff; background: #7752a722; }
+.sr { color: #75ffcd; background: #2b946522; }
+.s { color: #7acfff; background: #2772a222; }
+.r { color: #bdccd9; background: #6d859522; }
+table { width: 100%; border-collapse: collapse; text-align: left; table-layout: fixed; }
+th { padding: 13px 24px; color: var(--muted); background: #03141b66; font-size: 13px; font-weight: 500; }
+td { padding: 15px 24px; border-top: 1px solid #b2fff00c; font-size: 14px; overflow-wrap: anywhere; }
+th:first-child { width: 90px; }
+th:nth-child(2) { width: 28%; }
+td:nth-child(2) { font-weight: 700; color: #e4faff; }
+td:nth-child(3) { color: #b6d1da; }
+tr:hover td { background: #70ffe107; }
+.rank { font-weight: 800; }
+.special td:nth-child(3) { color: #ffe0a0; }
+.empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+[hidden] { display: none !important; }
+footer { text-align: center; padding: 20px 0 45px; color: var(--muted); font-size: 13px; }
+footer a { display: inline-block; margin-top: 10px; color: var(--green); }
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 30px);
+  padding: 12px 22px;
+  border: 1px solid var(--green);
+  border-radius: 12px;
+  background: #082d35;
+  box-shadow: 0 8px 40px #0008;
+  color: #d8fff3;
+  z-index: 10;
+  text-align: center;
+}
+@media (max-width: 680px) {
+  .wrap { width: calc(100% - 24px); }
+  .hero { padding-top: 48px; }
+  .eyebrow { letter-spacing: 3px; }
+  .servers, .toolbar { padding: 18px; }
+  .server-grid, .portals { grid-template-columns: 1fr; }
+  .portals { gap: 10px; }
+  .portal { padding: 16px 20px; }
+  .tier-head { padding: 18px 16px; }
+  th, td { padding: 12px 10px; }
+  th:first-child { width: 49px; }
+  th:nth-child(2) { width: 31%; }
+  td { font-size: 13px; }
+  .nav { gap: 8px; }
+  .nav a { padding: 6px 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<div class="background" aria-hidden="true">
+  <div class="ring one"></div>
+  <div class="ring two"></div>
+  <div class="beam"></div>
+  <div class="beam"></div>
+  <div class="beam"></div>
+</div>
+
+<div class="wrap">
+  <header class="hero" id="top">
+    <p class="eyebrow">7377 · ARK · 斗罗大陆</p>
+    <h1>7377斗罗大陆专属明细</h1>
+    <p class="subtitle">
+      所有专属均为公开使用<br>
+      可通关副本免费集齐激活 · 签到达到指定天数自选激活 · 抽奖抽出激活
+    </p>
+    <div class="hero-mark" aria-hidden="true"></div>
+  </header>
+
+  <main>
+    <section class="panel servers" aria-labelledby="server-title">
+      <div class="section-top">
+        <h2 id="server-title">🎮 服务器直连</h2>
+        <p class="hint">💡 复制IP地址添加到Steam收藏</p>
+      </div>
+      <div class="server-grid">
+        <article class="server">
+          <span class="map">地图 · 孤岛</span>
+          <h3>斗罗大陆新手村</h3>
+          <code class="ip">103.91.208.155:52005</code>
+          <div class="actions">
+            <a class="btn primary" href="steam://connect/103.91.208.155:52005">🎮 直连新手村</a>
+            <button class="btn" type="button" data-copy="103.91.208.155:52005">复制IP</button>
+          </div>
+        </article>
+        <article class="server">
+          <span class="map">地图 · 仙境</span>
+          <h3>斗罗大陆上界</h3>
+          <code class="ip">103.91.208.155:52009</code>
+          <div class="actions">
+            <a class="btn primary" href="steam://connect/103.91.208.155:52009">🎮 直连上界</a>
+            <button class="btn" type="button" data-copy="103.91.208.155:52009">复制IP</button>
+          </div>
+        </article>
+      </div>
+      <p class="hint steam-note">直连按钮需在已安装Steam的电脑上打开，并允许浏览器唤起Steam。</p>
+    </section>
+
+    <nav class="portals" aria-label="教程与社区">
+      <a class="panel portal" href="https://v.douyin.com/RPFMj6Jsib4/" target="_blank" rel="noopener noreferrer">
+        <b aria-hidden="true">↗</b>
+        <strong>▶ 斗罗大陆教程</strong>
+        <span>前往抖音查看教程</span>
+      </a>
+      <a class="panel portal" href="https://qm.qq.com/q/tUjNnSJAl2" target="_blank" rel="noopener noreferrer">
+        <b aria-hidden="true">↗</b>
+        <strong>☏ 7377萌新服务器</strong>
+        <span>点击加入QQ群聊</span>
+      </a>
+      <a class="panel portal" href="https://buy.jry0.com/shop/ARK7377" target="_blank" rel="noopener noreferrer">
+        <b aria-hidden="true">↗</b>
+        <strong>✦ 卡密抽奖</strong>
+        <span>前往卡密抽奖页面</span>
+      </a>
+    </nav>
+
+    <section class="panel toolbar" aria-label="查询专属">
+      <label class="search-label" for="search">查找你的专属</label>
+      <input class="search" id="search" type="search"
+        placeholder="搜索名称、阶级或技能，例如：唐三、SP、流血"
+        autocomplete="off">
+      <nav class="nav" aria-label="专属阶级导航">
+        <a href="#tier-SP">SP · 14</a>
+        <a href="#tier-SSR">SSR · 8</a>
+        <a href="#tier-SR">SR · 15</a>
+        <a href="#tier-S">S · 30</a>
+        <a href="#tier-R">R · 9</a>
+      </nav>
+      <p class="stats" id="stats" role="status" aria-live="polite"></p>
+    </section>
+
+    <div id="tables"></div>
+    <p class="panel empty" id="empty" hidden>没有找到匹配的专属，请尝试其他名称或技能关键词。</p>
+    <noscript>
+      <p class="panel empty">请启用浏览器JavaScript以显示专属表及使用搜索、复制功能。</p>
+    </noscript>
+  </main>
+
+  <footer>
+    7377 · 斗罗大陆 ｜ 专属明细
+    <br><a href="#top">返回顶部 ↑</a>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+"use strict";
+
+const common = "技能均为左右C键3技能无特性";
+const spCommon = "技能左右C键3技能，左键命中带增伤、减伤、挂百分比流血";
+const ssrCommon = "左右C键3技能，打直伤T0伤害倍率";
+
+const groups = [
+  {
+    tier: "SP",
+    title: "T0",
+    note: "技能效果特性详见各专属条目",
+    rows: [
+      ["独断万古海神唐三", "技能左右C键3技能，左键命中带增伤、减伤、挂百分比流血、定身控制五秒"],
+      ["须弥唐昊", "技能左右CX键4技能，左键命中带增伤、减伤、挂百分比流血、挂虚弱，X挂冰冻控制五秒"],
+      ["爆衣修罗神唐三", "技能左右CX键4技能，左键命中带增伤、减伤、挂百分比流血，O键武魂开关"],
+      ["白衣修罗神唐三", "技能左右CX键4技能，左键命中带增伤、减伤、挂百分比流血，O键武魂开关"],
+      ["修罗唐三", "技能左右键2技能，左键命中带增伤、减伤、挂百分比流血，右键百分比伤害"],
+      ["蓝银皇唐三", "技能左右C键3技能，右键命中带增伤、减伤、挂百分比流血"],
+      ["杀戮唐晨", spCommon],
+      ["屠戮万界修罗唐晨", spCommon],
+      ["九霄龙吟剑尘心", spCommon],
+      ["神.杨无敌", spCommon],
+      ["傲视天下神比比东", "技能左右C键3技能，右键命中带增伤、减伤、挂百分比流血"],
+      ["神.宁荣荣", "技能左右C键3技能，左键带增伤、减伤、回血、自身无敌5秒，30秒CD"],
+      ["雪霜肃殺千仞归", spCommon],
+      ["千山万仞凭雪落", "技能左右C键3技能，左键命中带增伤、减伤"]
+    ]
+  },
+  {
+    tier: "SSR",
+    title: "T1",
+    note: "直伤倍率及特殊效果详见下表",
+    rows: [
+      ["半神之弓光翎", "左右C键3技能，左键命中挂百分比流血、失明效果，左键CD6分钟"],
+      ["修罗小舞", ssrCommon],
+      ["凤栖梧桐舞", ssrCommon],
+      ["纵横九天星辰唐三", "左右C键3技能，左键命中挂百分比流血、恐惧效果，左键超高频率"],
+      ["极光唐三", ssrCommon],
+      ["昊天锤唐三", ssrCommon],
+      ["第一昊天", ssrCommon],
+      ["海神", ssrCommon]
+    ]
+  },
+  {
+    tier: "SR",
+    title: "T2",
+    note: "独孤博、刺豚斗罗、杨无敌单独列明特性；其余12个均为左右C键3技能无特性",
+    rows: [
+      ["独孤博", "左键带致盲", true],
+      ["刺豚斗罗", "C键可吸怪", true],
+      ["杨无敌", "T2伤害最高", true],
+      ...[
+        "千道流", "千寻疾", "月关", "鬼魅", "蛇矛斗罗", "古榕",
+        "独臂剑尘心", "波塞西", "海龙斗罗", "八蛛魂骨唐三",
+        "婚纱小舞", "前世唐三"
+      ].map(name => [name, common])
+    ]
+  },
+  {
+    tier: "S",
+    title: "T3",
+    note: "均为左右C键3技能；唐三右键带控制，其余无特性",
+    rows: [
+      ...[
+        "比比东", "弗兰德", "柳二龙", "梦神机", "剑尘心",
+        "小舞", "朱竹清", "马红俊", "宁风致", "赵无极",
+        "焱", "孟依然", "白沉香", "秦明", "雷天",
+        "独孤雁", "邪月", "海魔女", "戴沐白", "奥斯卡",
+        "宁荣荣", "玉天心", "玉天恒", "泰坦", "火舞",
+        "火无双", "白鹤", "水冰儿", "牛皋"
+      ].map(name => [name, common]),
+      ["唐三", "技能左右C键3技能，右键带控制", true]
+    ]
+  },
+  {
+    tier: "R",
+    title: "T4",
+    note: common,
+    rows: [
+      ...[
+        "京灵", "御风", "叶泠泠", "绛珠", "黄远",
+        "风笑天", "泰隆", "呼延力", "大师"
+      ].map(name => [name, common])
+    ]
+  }
+];
+
+const tables = document.getElementById("tables");
+const records = [];
+const sections = [];
+
+for (const group of groups) {
+  const section = document.createElement("section");
+  section.className = "panel tier-section";
+  section.id = "tier-" + group.tier;
+  section.setAttribute("aria-labelledby", "heading-" + group.tier);
+
+  const head = document.createElement("div");
+  head.className = "tier-head";
+
+  const badge = document.createElement("span");
+  badge.className = "badge " + group.tier.toLowerCase();
+  badge.textContent = group.tier;
+
+  const intro = document.createElement("div");
+  const heading = document.createElement("h2");
+  heading.id = "heading-" + group.tier;
+  heading.textContent = group.title + " · " + group.rows.length + "位专属";
+  const note = document.createElement("p");
+  note.textContent = group.note;
+
+  intro.append(heading, note);
+  head.append(badge, intro);
+
+  const table = document.createElement("table");
+  table.setAttribute("aria-label", group.tier + "专属明细");
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  for (const label of ["阶级", "龙名称", "技能效果特性"]) {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = label;
+    headerRow.append(th);
+  }
+  thead.append(headerRow);
+
+  const tbody = document.createElement("tbody");
+  const groupRecords = [];
+
+  for (const [name, skill, special] of group.rows) {
+    const tr = document.createElement("tr");
+    if (special) tr.className = "special";
+    const rankCell = document.createElement("td");
+    const rank = document.createElement("span");
+    rank.className = "rank " + group.tier.toLowerCase();
+    rank.textContent = group.tier;
+    rankCell.append(rank);
+
+    const nameCell = document.createElement("td");
+    nameCell.textContent = name;
+    const skillCell = document.createElement("td");
+    skillCell.textContent = skill;
+    tr.append(rankCell, nameCell, skillCell);
+    tbody.append(tr);
+
+    const record = {
+      element: tr,
+      text: [group.tier, name, skill].join(" ").toLowerCase()
+    };
+    records.push(record);
+    groupRecords.push(record);
+  }
+
+  table.append(thead, tbody);
+  section.append(head, table);
+  tables.append(section);
+  sections.push({ element: section, records: groupRecords });
+}
+
+const search = document.getElementById("search");
+const stats = document.getElementById("stats");
+const empty = document.getElementById("empty");
+
+function filterRows() {
+  const terms = search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  let count = 0;
+  for (const record of records) {
+    const visible = terms.every(term => record.text.includes(term));
+    record.element.hidden = !visible;
+    if (visible) count++;
+  }
+  for (const section of sections) {
+    section.element.hidden = !section.records.some(record => !record.element.hidden);
+  }
+  stats.textContent = terms.length
+    ? "找到 " + count + " 位专属 / 共 " + records.length + " 位"
+    : "共 " + groups.length + " 个阶级 · " + records.length + " 位专属";
+  empty.hidden = count !== 0;
+}
+search.addEventListener("input", filterRows);
+filterRows();
+
+document.querySelectorAll(".nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    search.value = "";
+    filterRows();
+  });
+});
+
+const toast = document.getElementById("toast");
+let toastTimer;
+function notify(message) {
+  clearTimeout(toastTimer);
+  toast.textContent = message;
+  toast.hidden = false;
+  toastTimer = setTimeout(() => { toast.hidden = true; }, 3500);
+}
+
+function legacyCopy(text) {
+  const previous = document.activeElement;
+  const field = document.createElement("textarea");
+  field.value = text;
+  field.setAttribute("readonly", "");
+  field.style.cssText = "position:fixed;left:-9999px;top:0;";
+  document.body.append(field);
+  let success = false;
+  try {
+    field.select();
+    field.setSelectionRange(0, text.length);
+    success = document.execCommand("copy");
+  } catch (_) {
+    success = false;
+  } finally {
+    field.remove();
+    if (previous && typeof previous.focus === "function") previous.focus();
+  }
+  return success;
+}
+
+document.querySelectorAll("[data-copy]").forEach(button => {
+  button.addEventListener("click", async () => {
+    const ip = button.dataset.copy;
+    let copied = false;
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(ip);
+        copied = true;
+      } catch (_) {}
+    }
+    if (!copied) copied = legacyCopy(ip);
+    if (copied) {
+      notify("已复制IP：" + ip);
+    } else {
+      window.prompt("自动复制不可用，请手动复制以下IP：", ip);
+    }
+  });
+});
+</script>
+</body>
+</html>
