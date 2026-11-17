@@ -3,1014 +3,773 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#10213c">
-<title>👑ARK7377总览👑</title>
+<meta name="theme-color" content="#eee5d5">
+<title>ARK7377总览 · 共赴方舟</title>
 <style>
 :root{
-  color-scheme:dark;
-  --text:#f1f6ff;
-  --muted:#c1cfe4;
-  --blue:#8fdcff;
-  --gold:#ffe1a0;
-  --border:rgba(147,199,255,.3);
-  --panel:rgba(10,22,43,.94);
-  --header-height:68px;
-  --video-brightness:1;
+  --paper:#f7f1e5;--ink:#232c30;--muted:#65615a;
+  --gold:#936c2b;--line:rgba(102,79,42,.28);
+  --video-opacity:.68;--side-width:208px;
 }
 *{box-sizing:border-box}
-html{
-  scroll-behavior:smooth;
-  scroll-padding-top:calc(var(--header-height) + 20px);
-  background:#0b1831;
-}
+html{scroll-behavior:smooth;scroll-padding-top:150px}
 body{
-  margin:0;
-  color:var(--text);
-  font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
-  font-size:16px;
-  line-height:1.85;
-  overflow-x:hidden;
+  margin:0;color:var(--ink);
+  font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+  background:#e9e1d3;line-height:1.8;
 }
+button,input,a{-webkit-tap-highlight-color:transparent}
 button,input{font:inherit}
-button,a,input,summary{-webkit-tap-highlight-color:transparent}
-button,summary{cursor:pointer}
-a{color:var(--blue);text-underline-offset:4px}
 button,a{touch-action:manipulation}
-button:focus-visible,a:focus-visible,input:focus-visible,
-summary:focus-visible,[tabindex]:focus-visible{
-  outline:3px solid var(--gold);outline-offset:4px;
+button{cursor:pointer}
+a{color:#285c64;text-decoration:none}
+a:hover{text-decoration:underline}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,
+.table-wrap:focus-visible{
+  outline:3px solid #16868e;outline-offset:4px
 }
 [hidden]{display:none!important}
-::selection{background:#b7e8ff;color:#091b32}
-button,.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  padding:8px 13px;
-  border:1px solid var(--border);border-radius:10px;
-  background:#1b3554;color:var(--text);
-  text-decoration:none;line-height:1.5;
-  transition:background .2s,border-color .2s;
+::selection{background:#dcc58a;color:#172a30}
+.scene{position:fixed;inset:0;z-index:-3;overflow:hidden;background:#e9e1d3}
+.landscape{
+  position:absolute;inset:0;
+  background:url("background.jpg") center/cover no-repeat;
+  opacity:.76;
 }
-button:hover,.btn:hover{background:#2a5078;border-color:#a5e3ff}
-button:disabled{opacity:.6;cursor:default}
-.btn.gold{background:#493b23;border-color:#bc9b59;color:#fff0ce}
-.skip{
-  position:fixed;left:12px;top:-100px;z-index:100;
-  padding:12px 20px;background:white;color:#10213c;
+.scene video{
+  position:absolute;width:100%;height:100%;object-fit:cover;
+  opacity:var(--video-opacity);transition:opacity .3s;
 }
-.skip:focus{top:12px}
-
-/* 视频保持原始明亮度，不加整屏黑色遮罩。 */
-.background{
-  position:fixed;inset:0;z-index:0;
-  pointer-events:none;overflow:hidden;
-  background:
-    radial-gradient(ellipse at 12% 18%,#2467a8 0,transparent 48%),
-    radial-gradient(ellipse at 84% 45%,#663e86 0,transparent 45%),
-    linear-gradient(145deg,#0b1831,#16395a 60%,#151d40);
+.scene::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,rgba(244,236,218,.35),rgba(255,253,247,.06) 60%,rgba(237,223,194,.28));
+  pointer-events:none;
 }
-#backgroundVideo{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;opacity:1;
-  filter:brightness(var(--video-brightness));
+.paper-grain{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.18;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%236e6048' opacity='.35' filter='url(%23n)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
 }
 .aurora{
-  position:absolute;inset:-15%;
-  background:
-    radial-gradient(ellipse at 12% 28%,#27bfff24,transparent 42%),
-    radial-gradient(ellipse at 88% 25%,#9d7aff20,transparent 44%),
-    radial-gradient(ellipse at 50% 90%,#40ded51a,transparent 45%);
-  animation:aurora 20s ease-in-out infinite alternate;
+  position:fixed;inset:-30%;z-index:-1;pointer-events:none;opacity:.3;
+  background:conic-gradient(from 30deg,transparent,#82c8c0,transparent 28%,#e9b284,transparent 56%,#baa9d2,transparent 80%);
+  filter:blur(75px);animation:aurora 32s linear infinite;
 }
-@keyframes aurora{
-  to{transform:translate3d(3%,-2%,0);filter:hue-rotate(30deg)}
+@keyframes aurora{to{transform:rotate(360deg)}}
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:rgba(248,243,232,.97);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 4px 24px #28211614;
 }
-#stars{position:absolute;inset:0}
-.star{
-  position:absolute;
-  width:var(--size);height:var(--size);border-radius:50%;
-  background:#bcecff;
-  box-shadow:0 0 5px #248ce9,0 0 12px #46baff;
-  animation:twinkle var(--duration) ease-in-out infinite alternate;
-  animation-delay:var(--delay);
-}
-@keyframes twinkle{
-  from{opacity:.25;transform:scale(.7)}
-  to{opacity:1;transform:scale(1.18)}
-}
-.meteor{
-  position:absolute;top:9%;left:90%;
-  width:190px;height:2px;
-  background:linear-gradient(90deg,transparent,#65caff,#e5f9ff);
-  box-shadow:0 0 8px #58baff;
-  opacity:0;animation:meteor 14s linear infinite;
-}
-.meteor.two{top:26%;left:110%;animation-delay:6s;animation-duration:19s}
-@keyframes meteor{
-  0%,88%{opacity:0;transform:translate(0,0) rotate(-30deg)}
-  90%{opacity:1}
-  100%{opacity:0;transform:translate(-100vw,55vh) rotate(-30deg)}
-}
-.obelisks{
-  position:absolute;bottom:0;left:0;width:100%;height:65%;
-  opacity:.7;
-}
-#starlightLayer{
-  position:fixed;inset:0;z-index:5;overflow:hidden;pointer-events:none;
-}
-.blue-spark{
-  position:absolute;left:0;color:#bfefff;
-  font-size:var(--size);
-  text-shadow:0 0 4px #0060c0,0 0 12px #2bafff;
-  animation:star-pass var(--duration) linear forwards;
-  white-space:nowrap;
-}
-@keyframes star-pass{
-  from{transform:translate3d(105vw,0,0);opacity:0}
-  8%,88%{opacity:.9}
-  to{transform:translate3d(-120%,42px,0);opacity:0}
-}
-
-/* 双目录 */
-.site-header{
-  position:fixed;top:0;left:0;right:0;z-index:50;
-  background:rgba(8,20,40,.97);
-  border-bottom:1px solid var(--border);
-  box-shadow:0 6px 24px #0003;
-}
-.header-row{
-  min-height:68px;max-width:1800px;margin:auto;
+.topline{
   display:flex;align-items:center;justify-content:space-between;
-  gap:14px;padding:10px 22px;
+  gap:16px;padding:12px 26px;
 }
-.brand{color:var(--gold);text-decoration:none;font-weight:800;letter-spacing:1px}
-.header-actions{display:flex;gap:8px;flex-wrap:wrap}
-#topMenu{
-  max-height:55vh;overflow:auto;
-  padding:12px 22px 18px;border-top:1px solid var(--border);
+.brand{font-family:"STKaiti","KaiTi",serif;font-size:23px;font-weight:bold;letter-spacing:2px;color:#263b40}
+.brand small{font-size:12px;color:var(--gold);letter-spacing:3px;margin-left:12px}
+.ui-button{
+  border:1px solid var(--line);border-radius:7px;padding:6px 12px;
+  background:#fffaf0;color:#37342d;
 }
-.nav-grid{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:9px;
-  max-width:1300px;margin:auto;
+.ui-button:hover{background:#eae0c8;border-color:#a68a50}
+#topNav{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:5px 10px;
+  padding:0 18px 12px;
 }
-.nav-grid a,.side-nav a{
-  color:#dcecff;text-decoration:none;
-  border:1px solid transparent;border-radius:9px;
-  padding:7px 11px;
-}
-.nav-grid a:hover,.side-nav a:hover,
-.nav-grid a.active,.side-nav a.active{
-  background:#203e61;border-color:#5e9ac4;color:#fff;
-}
+.nav-link{padding:5px 11px;border-radius:5px;font-size:13px;color:#464238}
+.nav-link:hover,.nav-link.active{background:#e8dcc2;color:#533d15;text-decoration:none}
 .sidebar{
-  position:fixed;left:18px;top:calc(var(--header-height) + 18px);
-  bottom:18px;width:218px;z-index:40;
-  background:rgba(8,20,40,.97);
-  border:1px solid var(--border);border-radius:16px;
-  box-shadow:0 12px 30px #0003;
-  display:flex;flex-direction:column;overflow:hidden;
+  position:fixed;top:151px;left:17px;width:var(--side-width);z-index:35;
+  max-height:calc(100dvh - 175px);overflow:auto;
+  background:rgba(248,242,229,.97);
+  border:1px solid #a48a5770;border-radius:9px;
+  box-shadow:0 12px 30px #34271218;
 }
-.side-heading{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:8px;padding:13px;border-bottom:1px solid var(--border);
-}
-.side-heading strong{color:var(--gold)}
-.side-nav{padding:10px;overflow:auto}
-.side-nav a{display:block;font-size:14px;margin-bottom:3px}
-.side-note{padding:12px 15px;font-size:12px;color:var(--muted)}
-#sideOpen{
-  position:fixed;left:12px;top:calc(var(--header-height) + 18px);
-  z-index:41;box-shadow:0 6px 20px #0004;
-}
-body.side-collapsed .sidebar{display:none}
-body:not(.side-collapsed) #sideOpen{display:none}
-body.side-collapsed main{margin-left:auto}
-main{
-  position:relative;z-index:10;
-  max-width:1500px;margin:0 24px 0 258px;
-  padding:calc(var(--header-height) + 28px) 0 60px;
-}
+.side-head{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line)}
+.side-head strong{font-family:"KaiTi",serif;font-size:20px}
+.side-head button{font-size:12px;padding:4px 8px}
+#sideNav{display:grid;gap:4px;padding:12px}
+.side-note{margin:10px 13px 15px;color:var(--muted);font-size:12px}
+.sidebar.collapsed{width:107px}
+.sidebar.collapsed .side-head{border:0;justify-content:center}
+.sidebar.collapsed .side-head strong{display:none}
+main{max-width:1460px;margin:0 auto;padding:0 35px 170px 250px}
 .hero{
-  text-align:center;position:relative;overflow:hidden;
-  padding:52px 24px 34px;
-  border:1px solid #b4cbe980;border-radius:22px;
-  background:linear-gradient(135deg,rgba(12,27,52,.9),rgba(22,35,61,.87));
-  box-shadow:0 20px 50px #0003,inset 0 0 50px #5baeff0c;
+  position:relative;text-align:center;min-height:590px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:65px 15px;isolation:isolate;
 }
-.hero:before,.hero:after{
-  content:"";position:absolute;left:12%;right:12%;height:1px;
-  background:linear-gradient(90deg,transparent,#edcf8d,#9fddff,#edcf8d,transparent);
+.hero::before{
+  content:"";position:absolute;z-index:-1;width:min(650px,95%);height:440px;
+  background:radial-gradient(ellipse,rgba(255,251,240,.96),rgba(251,247,236,.8) 40%,transparent 72%);
 }
-.hero:before{top:19px}.hero:after{bottom:19px}
-.eyebrow{color:#d8c295;font-size:12px;letter-spacing:4px;margin:0 0 14px}
-h1{font-size:clamp(30px,4.3vw,66px);line-height:1.3;margin:0;font-weight:900}
-.title-plain{color:#fff2d4;text-shadow:0 2px 12px #0008}
-.crown{font-size:.7em;vertical-align:.12em}
-.flow-number{
-  color:#adf0ff;
-  background:linear-gradient(100deg,#8feaff,#b6afff,#ff9cdb,#ffe6a5,#8ff5df,#8feaff);
-  background-size:300% 100%;
-  -webkit-background-clip:text;background-clip:text;
+.ink-ring{
+  position:absolute;width:360px;height:360px;max-width:85vw;
+  border:13px solid #273b4530;border-left:5px solid #273b4509;
+  border-right:19px solid #273b451a;border-radius:48% 52% 46% 54%;
+  transform:rotate(-26deg);z-index:-1;
+}
+.eyebrow{font-size:12px;letter-spacing:6px;color:#73542d;font-weight:bold}
+.hero h1{
+  margin:18px 0 8px;font-family:"STKaiti","KaiTi","Songti SC",serif;
+  font-size:clamp(35px,5.4vw,72px);line-height:1.3;
+  color:#1f343b;letter-spacing:3px;text-shadow:0 2px 0 #fff9ed;
+}
+.crown{font-size:.65em;letter-spacing:0;text-shadow:0 2px 7px #d3a33555}
+.flow{
+  color:#9c5324;
+  background:linear-gradient(110deg,var(--c1,#88461e),var(--c2,#1b737b),var(--c3,#934e88),var(--c1,#88461e));
+  background-size:300% 100%;background-clip:text;-webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:flow 6s linear infinite;
-  filter:drop-shadow(0 0 10px #74caff55);
+  animation:flow 5s linear infinite,glimmer 3.5s ease-in-out infinite;
+  font-weight:900;text-shadow:none;display:inline-block;
 }
-@keyframes flow{to{background-position:300% 50%}}
-.subtitle{font-size:clamp(18px,2vw,26px);color:#dfedff;margin:17px 0 8px}
-.hero-description{color:var(--muted);max-width:760px;margin:10px auto 22px}
-.hero-links,.tools,.quick-links{
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;
+@keyframes flow{to{background-position:300% 0}}
+@keyframes glimmer{50%{filter:drop-shadow(0 0 5px #bf994649)}}
+.hero .number{--c1:#a36916;--c2:#006e84;--c3:#ac2865;animation-duration:4s,3s}
+.subtitle{margin:8px 0 20px;font-family:"KaiTi",serif;font-size:clamp(20px,2.5vw,29px);font-weight:bold}
+.hero-poem{font-family:"KaiTi",serif;font-size:18px;color:#47575a;letter-spacing:3px;margin:0 0 24px}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.hero-tags span{padding:4px 13px;border:1px solid #98754250;background:#faf5e9d9;border-radius:30px;font-size:12px}
+.hero-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:26px}
+.action{
+  display:inline-block;padding:10px 23px;color:#fff7df;
+  background:linear-gradient(125deg,#243f45,#3d6566);border:1px solid #b49a5e;border-radius:6px;
 }
-.tools{
-  margin:24px auto 0;padding-top:18px;border-top:1px solid var(--border);
-  font-size:14px;
+.action:hover{filter:brightness(1.12);text-decoration:none}
+.action.light{background:#f4e8cc;color:#664a22}
+.seal{
+  margin-top:24px;display:inline-block;color:#933c31;border:2px solid #933c31;
+  font-family:"KaiTi",serif;letter-spacing:3px;padding:1px 8px;transform:rotate(-6deg);font-weight:bold;
 }
-.brightness{
-  display:flex;align-items:center;gap:8px;
-  background:#152d49;padding:7px 12px;border-radius:10px;
-}
-.brightness input{width:105px;accent-color:#85d7ff}
-#brightnessValue{min-width:40px;color:#caeaff}
-.video-status{font-size:13px;color:var(--muted);margin:12px 0 0}
 .panel{
-  margin-top:22px;padding:26px;
-  border:1px solid var(--border);border-radius:18px;
-  background:var(--panel);
-  box-shadow:0 12px 32px #0002;
+  position:relative;margin:0 0 30px;padding:30px;
+  background:rgba(250,246,236,.96);
+  border:1px solid #79664773;
+  border-radius:5px 14px 6px 12px;
+  box-shadow:0 15px 44px #1d25231a,inset 0 0 35px #a9905a0e;
+  scroll-margin-top:150px;
 }
-.section-heading{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;margin-bottom:16px;
+.panel::before{
+  content:"";position:absolute;inset:5px;pointer-events:none;
+  border:1px solid #89744832;border-radius:2px 11px 3px 8px;
 }
-h2{font-size:25px;margin:0;color:#fff1d2;line-height:1.5}
-h3{font-size:19px;color:#b8e7ff;margin:24px 0 12px}
-h4{font-size:17px;color:#e8f4ff;margin:0 0 7px}
-p{margin:10px 0}
-.muted{color:var(--muted)}
-.label{
-  color:#c0e6ff;background:#1a3553;border:1px solid #44688a;
-  border-radius:30px;padding:3px 11px;font-size:12px;white-space:nowrap;
+.panel::after{
+  content:"";position:absolute;right:12px;top:0;width:135px;height:4px;
+  background:linear-gradient(90deg,transparent,#34464a99,#34464a22,transparent);
+  transform:rotate(-1deg);
 }
-.quick-links{justify-content:flex-start;margin:14px 0}
-.notice{
-  border:1px solid #967e4c;border-left:4px solid #e9cc82;
-  border-radius:10px;background:#372f21;padding:13px 16px;
-  color:#fff0cf;margin:14px 0;
+.section-title{display:flex;gap:13px;align-items:center;margin-bottom:16px}
+.section-number{font-family:Georgia,serif;color:#a18b5f;font-size:30px;line-height:1}
+h2{font-family:"STKaiti","KaiTi",serif;font-size:28px;line-height:1.4;margin:0;letter-spacing:2px}
+h3{font-size:19px;color:#344c4d;margin:25px 0 12px}
+p{margin:9px 0}
+.note{padding:13px 17px;background:#efe5cd;border-left:3px solid #a27d34;border-radius:0 5px 5px 0;font-size:14px}
+.muted{color:var(--muted);font-size:13px}
+.subnav{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}
+.subnav a{padding:5px 13px;border:1px solid #ab956751;border-radius:20px;background:#fffaf0;font-size:13px}
+.subsection{scroll-margin-top:150px}
+.key-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.key-card{padding:17px;background:#fffdf6;border:1px solid var(--line);border-radius:6px}
+kbd{font-family:inherit;display:inline-block;min-width:45px;text-align:center;padding:1px 10px;margin-right:6px;background:#2e484e;color:#fff5da;border-radius:4px;box-shadow:0 3px 0 #152c31}
+.key-card p{font-size:14px;margin-top:10px}
+.command-list{display:grid;gap:10px}
+.command-row{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:15px;align-items:center;
+  padding:12px 15px;background:#fffdf7;border:1px solid #b19b723d;border-radius:5px;
 }
-.info{
-  border:1px solid #365b83;border-left:4px solid #83ceff;
-  border-radius:10px;background:#152b47;padding:13px 16px;
-  margin:14px 0;
+.command-row strong{font-size:15px;color:#21494d;overflow-wrap:anywhere}
+.command-row p{font-size:13px;color:#585950;margin:4px 0 0;overflow-wrap:anywhere}
+.copy-buttons{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:200px}
+.copy-btn{
+  font-size:12px;border:1px solid #b6a17a;background:#f2ead8;color:#554526;
+  padding:5px 9px;border-radius:5px;white-space:nowrap;
 }
-.key-grid,.guide-grid{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
+.copy-btn:hover{background:#e0d0ac}
+.copy-btn.shortcut{background:#e6efea;color:#2f5a54;border-color:#a5bcb4}
+details.rule{border:1px solid var(--line);background:#fffcf4;margin:13px 0;border-radius:6px}
+details.rule summary{font-weight:bold;color:#344b4e;padding:14px 16px;cursor:pointer}
+details.rule[open] summary{border-bottom:1px dashed var(--line)}
+.rule-body{padding:5px 18px 14px;font-size:14px}
+.rule-body ol{padding-left:24px;margin:12px 0}
+.rule-body li{margin:12px 0}
+.rule-body li strong{display:block;color:#473b2c}
+.table-wrap{overflow-x:auto;border:1px solid #b7a27b70;border-radius:7px;margin-top:17px;background:#fffcf5}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:14px 13px;border-bottom:1px solid #a9916630;text-align:left;vertical-align:middle}
+th{background:#e9dfc8;color:#473e2a;font-weight:bold;white-space:nowrap}
+tbody tr:nth-child(even){background:#f3eddf}
+tbody tr:hover{background:#eee5d2}
+tbody tr:last-child td{border-bottom:0}
+.vip-name{font-size:21px;white-space:nowrap;letter-spacing:.5px}
+.price{color:#8b5126;font-weight:bold;white-space:nowrap}
+.resource{min-width:320px}
+.chip{display:inline-block;padding:2px 7px;margin:3px 3px 3px 0;background:#ffffff90;border:1px solid #a995682e;border-radius:4px;font-size:12px}
+#equipment table{min-width:1050px}
+#equipment td:first-child{min-width:155px}
+#equipment td:last-child{min-width:190px}
+#attributes table{min-width:570px}
+#privileges table{min-width:560px}
+.links-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px}
+.link-card{
+  display:block;padding:18px;background:linear-gradient(135deg,#fffdf7,#ece5d4);
+  border:1px solid #9b825b66;border-radius:7px;color:#2c484d;transition:transform .2s,box-shadow .2s;
 }
-.key-card,.guide-card{
-  border:1px solid var(--border);border-radius:12px;
-  background:#142a45;padding:18px;
+.link-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px #644d2520;text-decoration:none}
+.link-card strong{display:block;font-size:17px}
+.link-card span{display:block;font-size:12px;color:#70624b;margin-top:5px}
+.footer{text-align:center;color:#423e35;padding:20px;background:#f8f2e7e6;border:1px solid var(--line);border-radius:8px}
+.footer strong{font-family:"KaiTi",serif;font-size:23px;letter-spacing:3px}
+.effects-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:45}
+.flower-message{
+  position:absolute;left:100%;width:max-content;max-width:85vw;
+  padding:5px 15px;background:rgba(255,251,241,.92);
+  border:1px solid #bc956f66;border-radius:25px;
+  box-shadow:0 3px 12px #30302415;color:#634832;
+  font-family:"KaiTi","STKaiti",serif;font-size:18px;
+  white-space:nowrap;animation:fly linear forwards;
 }
-.key-card p{margin:8px 0 0;color:#d7e3f5}
-kbd{
-  display:inline-block;margin-right:7px;padding:2px 10px;
-  color:#fff0c8;background:#27394e;
-  border:1px solid #8197b2;border-bottom-width:3px;border-radius:6px;
-  font:700 15px system-ui,sans-serif;
+@keyframes fly{to{transform:translateX(calc(-100vw - 100% - 40px))}}
+.controls{
+  position:fixed;right:17px;bottom:17px;z-index:60;width:250px;
+  border:1px solid #ab8a4f;background:rgba(249,243,230,.98);
+  box-shadow:0 8px 28px #33281329;border-radius:9px;overflow:hidden;
 }
-.table-wrap{
-  width:100%;overflow:auto;border:1px solid var(--border);border-radius:12px;
-  scrollbar-color:#50799f #11233b;
+.control-head{
+  display:flex;align-items:center;justify-content:space-between;padding:9px 13px;
+  background:#e9dec6;font-size:14px;font-weight:bold;
 }
-table{width:100%;border-collapse:collapse;text-align:left;font-size:14px}
-th,td{padding:13px 15px;border-bottom:1px solid #29415e;vertical-align:top}
-th{background:#203956;color:#eff7ff;font-weight:700;white-space:nowrap}
-td{background:#10243d}
-tr:nth-child(even) td{background:#142b46}
-tr:last-child td{border-bottom:0}
-tr:hover td{background:#1c3857}
-.commands-table{min-width:650px}
-.vip-table{min-width:820px}
-.attributes-table{min-width:560px}
-.equipment-table{min-width:1200px}
-.table-hint{font-size:13px;color:#a9bfd9;margin:8px 0}
-.command-line{display:flex;align-items:center;flex-wrap:wrap;gap:7px}
-code{
-  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
-  color:#c4edff;overflow-wrap:anywhere;
-}
-.copy-btn{padding:4px 9px;font-size:12px;white-space:nowrap}
-.alias{display:block;margin-top:7px;color:#bfd0e5;font-size:13px}
-.alias .copy-btn{margin-left:7px}
-.input-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}
-.input-row label{font-size:14px}
-input[type=text]{
-  min-width:180px;max-width:100%;padding:9px 12px;
-  color:#fff;background:#0a1b30;border:1px solid #6487ab;border-radius:8px;
-}
-.rule{
-  margin:12px 0;border:1px solid var(--border);
-  border-radius:12px;background:#112640;overflow:hidden;
-}
-.rule summary{
-  padding:15px 18px;font-weight:700;color:#d6edff;
-  background:#19324f;
-}
-.rule ol{margin:0;padding:16px 25px 18px 42px}
-.rule li{margin:0 0 14px;padding-left:3px}
-.rule li:last-child{margin-bottom:0}
-.rule li strong{color:#ffdf9e}
-.rule-actions{display:flex;gap:9px;flex-wrap:wrap}
-.rank{
-  display:inline-block;font-weight:900;
-  white-space:nowrap;font-size:16px;
-  color:var(--a,#bcefff);
-  background:linear-gradient(100deg,var(--a),var(--b),var(--c),var(--a));
-  background-size:240% 100%;
-  -webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:rank-flow 5s linear infinite,rank-glow 3.8s ease-in-out infinite alternate;
-}
-@keyframes rank-flow{to{background-position:240% 50%}}
-@keyframes rank-glow{
-  from{filter:drop-shadow(0 0 1px var(--a))}
-  to{filter:drop-shadow(0 0 5px var(--b))}
-}
-.perks{display:flex;flex-wrap:wrap;gap:6px}
-.perk{
-  display:inline-block;border:1px solid #365676;border-radius:6px;
-  background:#1a3552;color:#e0efff;padding:2px 7px;font-size:13px;
-}
-.money{color:#ffe4ac;font-weight:800;white-space:nowrap}
-.guide-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
-.guide-card p{color:var(--muted);margin:0;flex:1}
-.server-links{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.server-links a{padding:17px 8px;text-align:center}
-footer{
-  text-align:center;color:#cbd9ec;margin-top:24px;padding:20px;
-  border:1px solid var(--border);border-radius:14px;background:var(--panel);
-  font-size:13px;
-}
-.back-top{
-  position:fixed;bottom:20px;right:20px;z-index:45;
-  background:#183a59;box-shadow:0 5px 20px #0004;
-}
+.control-head button{border:0;background:transparent;color:#604a2b;padding:3px 5px}
+.control-body{padding:12px}
+.control-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.control-buttons button{font-size:12px;padding:7px 4px}
+.range-label{display:flex;justify-content:space-between;font-size:12px;margin:12px 0 4px}
+input[type=range]{width:100%;accent-color:#90713c}
+.status{font-size:11px;color:#69604f;line-height:1.5;margin:6px 0 0}
+.to-top{display:block;text-align:center;margin-top:9px;font-size:12px;color:#65512b}
 #toast{
-  position:fixed;left:50%;bottom:28px;transform:translateX(-50%);
-  max-width:90vw;z-index:100;padding:11px 20px;
-  color:#fff;background:#13334f;border:1px solid #8bd6ff;
-  border-radius:12px;box-shadow:0 10px 30px #0005;text-align:center;
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+  z-index:100;background:#263f44;color:#fff7e5;padding:10px 20px;
+  border:1px solid #c4a163;border-radius:7px;max-width:85vw;
+  box-shadow:0 5px 30px #0003;text-align:center;
 }
-.no-motion *,.no-motion *:before,.no-motion *:after{
-  animation:none!important;transition:none!important;
-}
-.no-motion .meteor{display:none}
-.no-motion .star{opacity:.8}
-.no-motion #starlightLayer{display:none}
-.no-motion{scroll-behavior:auto}
-noscript .notice{margin:90px 20px 20px;position:relative;z-index:20}
-@media(min-width:1800px){
-  main{margin-left:auto;margin-right:auto;max-width:1440px;padding-left:70px}
-  body.side-collapsed main{padding-left:0}
-}
+dialog{border:1px solid #a58a58;border-radius:9px;background:#faf4e6;color:#263b3c;max-width:90vw;width:430px;padding:25px}
+dialog::backdrop{background:#16232877}
+dialog input{display:block;width:100%;padding:10px;margin:15px 0;border:1px solid #bda87e;border-radius:4px}
+dialog .ui-button{float:right}
+.fx-off .flow,.fx-off .aurora{animation:none!important}
+.fx-off .aurora{opacity:.12}
+body.compact-side main{padding-left:145px}
+@media(min-width:1700px){main{max-width:1560px}}
 @media(max-width:1100px){
-  main{margin-left:242px;margin-right:16px}
-  .sidebar{left:12px;width:214px}
-  .panel{padding:20px}
-  .server-links{grid-template-columns:repeat(3,minmax(0,1fr))}
-  h1{font-size:clamp(28px,4.5vw,52px)}
+  main{padding-left:160px;padding-right:20px}
+  :root{--side-width:125px}
+  .side-head{padding:10px 7px;gap:4px}
+  .side-head strong{font-size:15px}
+  #sideNav{padding:7px}
+  #sideNav .nav-link{font-size:12px;padding:6px}
+  .side-note{display:none}
+  .panel{padding:24px}
+  .links-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:850px){
-  main,body.side-collapsed main{margin-left:16px;margin-right:16px}
-  .sidebar{width:235px;box-shadow:12px 0 50px #0007}
-  .header-row{padding:10px 14px}
-  .brand{font-size:14px}
-  .header-actions button{font-size:13px}
-  .hero{padding:50px 16px 30px}
-  .hero-description{font-size:14px}
-  .key-grid,.guide-grid{grid-template-columns:1fr}
-}
-@media(max-width:520px){
-  main,body.side-collapsed main{margin-left:10px;margin-right:10px}
-  h1{font-size:29px}
-  h2{font-size:21px}
-  .panel{padding:17px 13px}
-  .section-heading{align-items:flex-start;flex-direction:column;gap:6px}
-  .eyebrow{letter-spacing:2px;font-size:10px}
-  .server-links{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .tools{gap:8px}
-  .tools button{font-size:12px}
-  .header-row{gap:7px}
-  .header-actions{gap:5px}
-  .header-actions button{padding:7px 8px}
-  .brand{letter-spacing:0}
+@media(max-width:700px){
+  html{scroll-padding-top:170px}
+  .topline{padding:9px 12px}
+  .brand{font-size:19px}
+  .brand small{display:none}
+  #topNav{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:0 9px 9px}
+  #topNav .nav-link{white-space:nowrap}
+  .sidebar{top:113px;left:8px;width:180px;max-height:65dvh}
+  .sidebar.collapsed{width:96px}
+  main,body.compact-side main{padding:0 12px 180px}
+  .hero{min-height:530px;padding-top:80px}
+  .hero h1{letter-spacing:0;font-size:clamp(29px,7.6vw,48px)}
+  .hero-poem{font-size:15px;letter-spacing:1px}
+  .eyebrow{font-size:10px;letter-spacing:3px}
+  .ink-ring{width:290px;height:290px}
+  .panel{padding:21px 16px}
+  h2{font-size:24px}
+  .section-number{font-size:25px}
+  .key-grid{grid-template-columns:1fr}
+  .command-row{grid-template-columns:1fr;gap:8px}
+  .copy-buttons{justify-content:flex-start;max-width:none}
+  .links-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .link-card{padding:13px}
+  .link-card strong{font-size:15px}
+  .controls{right:9px;bottom:9px;width:220px}
+  #toast{bottom:85px}
+  .flower-message{font-size:15px}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  *,*:before,*:after{animation:none!important;transition:none!important}
-  .meteor,#starlightLayer{display:none}
+  .flow,.aurora{animation:none!important}
+  .link-card,.scene video{transition:none}
 }
 </style>
 </head>
 <body>
-<a class="skip" href="#mainContent">跳到正文</a>
-
-<div class="background" aria-hidden="true">
-  <video id="backgroundVideo" autoplay muted loop playsinline preload="metadata">
+<div class="scene" aria-hidden="true">
+  <div class="landscape"></div>
+  <video id="bgVideo" muted loop playsinline preload="metadata" poster="background.jpg">
     <source src="background.mp4" type="video/mp4">
   </video>
-  <div class="aurora"></div>
-  <div id="stars"></div>
-  <div class="meteor"></div>
-  <div class="meteor two"></div>
-  <!-- 方尖碑、泰克光束与翼龙意象 -->
-  <svg class="obelisks" viewBox="0 0 1920 900" preserveAspectRatio="xMidYMax slice">
-    <defs>
-      <linearGradient id="obeliskBlue" x1="0" y1="0" x2="1" y2="1">
-        <stop stop-color="#ddf8ff"/>
-        <stop offset=".4" stop-color="#39b9ec"/>
-        <stop offset="1" stop-color="#163d75"/>
-      </linearGradient>
-      <linearGradient id="obeliskPurple" x1="0" y1="0" x2="1" y2="1">
-        <stop stop-color="#eccaff"/>
-        <stop offset="1" stop-color="#6650bc"/>
-      </linearGradient>
-      <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
-        <stop stop-color="#6fd9ff" stop-opacity=".65"/>
-        <stop offset="1" stop-color="#6fd9ff" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <path d="M246 230L258 230L275 900L230 900Z" fill="url(#beam)"/>
-    <path d="M252 85L282 195L252 290L222 195Z"
-      fill="url(#obeliskBlue)" stroke="#b3eaff" stroke-width="2"/>
-    <path d="M252 85V290M222 195H282" fill="none" stroke="#d4f5ff"/>
-    <path d="M1635 130L1660 220L1635 305L1610 220Z"
-      fill="url(#obeliskPurple)" stroke="#cfceff" stroke-width="2"/>
-    <path d="M1631 280L1640 280L1657 900L1614 900Z" fill="url(#beam)"/>
-    <g fill="#0b2c49" stroke="#a2d9ff" stroke-width="1.5" opacity=".7">
-      <path d="M1130 180L1060 145L1090 175L1015 169L1115 195L1133 189L1155 202L1240 163L1170 178L1200 145Z"/>
-      <path d="M1430 320L1380 295L1400 317L1350 310L1420 335L1434 329L1450 340L1510 310L1460 322L1480 295Z"/>
-    </g>
-    <path d="M0 850L110 735L215 830L360 660L475 800L620 750L770 870L1000 810L1190 880L1410 725L1570 820L1770 680L1920 815V900H0Z"
-      fill="#153353" opacity=".25"/>
-  </svg>
 </div>
-<div id="starlightLayer" aria-hidden="true"></div>
+<div class="paper-grain" aria-hidden="true"></div>
+<div class="aurora" aria-hidden="true"></div>
+<div id="flowers" class="effects-layer" aria-hidden="true"></div>
 
-<header class="site-header" id="siteHeader">
-  <div class="header-row">
-    <a class="brand" href="#home">👑 ARK7377</a>
-    <div class="header-actions">
-      <button id="sideToggle" type="button" aria-controls="sidebar" aria-expanded="true">左侧目录</button>
-      <button id="topToggle" type="button" aria-controls="topMenu" aria-expanded="false">顶部目录 ▾</button>
-    </div>
+<header class="topbar">
+  <div class="topline">
+    <a class="brand" href="#home">ARK · 7377 <small>山海入墨 · 共赴方舟</small></a>
+    <button class="ui-button" id="topToggle" type="button" aria-controls="topNav" aria-expanded="true">收起顶部目录 ▴</button>
   </div>
-  <nav id="topMenu" aria-label="顶部目录" hidden>
-    <div class="nav-grid" id="topLinks"></div>
-  </nav>
+  <nav id="topNav" aria-label="顶部目录"></nav>
 </header>
 
-<aside class="sidebar" id="sidebar" aria-label="左侧目录">
-  <div class="side-heading">
-    <strong>✧ 温馨导航</strong>
-    <button id="sideClose" type="button" aria-label="收起左侧目录">收起</button>
+<aside class="sidebar" id="sidebar">
+  <div class="side-head">
+    <strong>温馨导航</strong>
+    <button class="ui-button" id="sideToggle" type="button" aria-controls="sideContents" aria-expanded="true">收起 ◂</button>
   </div>
-  <nav class="side-nav" id="sideLinks" aria-label="章节导航"></nav>
-  <div class="side-note">星海为伴 · 共赴方舟<br>点击目录可直接跳转章节</div>
+  <div id="sideContents">
+    <nav id="sideNav" aria-label="左侧目录"></nav>
+    <p class="side-note">墨染山河，花迎故友。<br>循目录而行，赴方舟之约。</p>
+  </div>
 </aside>
-<button id="sideOpen" type="button" aria-controls="sidebar" aria-expanded="false">☰ 目录</button>
 
-<noscript>
-  <div class="notice">
-    请启用 JavaScript 以显示完整命令、VIP、装备表格及交互目录。
-  </div>
-</noscript>
-
-<main id="mainContent">
-  <section class="hero" id="home" aria-labelledby="pageTitle">
-    <p class="eyebrow">ARK · SURVIVAL EVOLVED · 7377</p>
-    <h1 id="pageTitle">
-      <span class="crown">👑</span><span class="title-plain">ARK</span><span class="flow-number">7377</span><span class="title-plain">总览</span><span class="crown">👑</span>
-    </h1>
+<main>
+  <section class="hero" id="home">
+    <div class="ink-ring" aria-hidden="true"></div>
+    <div class="eyebrow">ARK : SURVIVAL EVOLVED</div>
+    <h1><span class="crown">👑</span>ARK<span class="flow number">7377</span>总览<span class="crown">👑</span></h1>
     <p class="subtitle">🎉加入7377共赴方舟🎉</p>
-    <p class="hero-description">
-      在星光与山水之间，开启你的方舟旅程。<br>
-      基础教程 · 服务器规则 · VIP权益 · 装备属性 · 各服入口
-    </p>
-    <div class="hero-links">
-      <a class="btn gold" href="https://qm.qq.com/q/tUjNnSJAl2" target="_blank" rel="noopener noreferrer">加入7377萌新服务器 ↗</a>
-      <a class="btn" href="#tutorial">查看基础教程</a>
-      <a class="btn" href="#rules">必读服务器规则</a>
-      <a class="btn" href="#sponsor">查看赞助表</a>
+    <p class="hero-poem">一卷山河墨 · 万物共生时<br>与7377同行，与知己共赴山海</p>
+    <div class="hero-tags">
+      <span>🌹方舟生存进化 </span><span>💎全模组正版授权</span><span> 🎮 全服数据互通</span>
     </div>
-    <div class="tools" aria-label="背景设置">
-      <button id="motionToggle" type="button" aria-pressed="true">✦ 动态：开</button>
-      <button id="barrageToggle" type="button" aria-pressed="true">✧ 星光弹幕：开</button>
-      <label class="brightness" for="brightness">
-        视频亮度
-        <input id="brightness" type="range" min="80" max="140" step="5" value="100">
-        <output id="brightnessValue" for="brightness">100%</output>
-      </label>
+    <div class="hero-actions">
+      <a class="action" href="#tutorial">开启方舟之旅</a>
+      <a class="action light" href="https://qm.qq.com/q/tUjNnSJAl2" target="_blank" rel="noopener noreferrer">加入7377萌新服务器 ↗</a>
     </div>
-    <p id="videoStatus" class="video-status" role="status" hidden></p>
+    <span class="seal">山海有约</span>
   </section>
 
   <section class="panel" id="tutorial">
-    <div class="section-heading">
-      <h2>01 · 基础教程</h2><span class="label">新玩家从这里开始</span>
-    </div>
-    <p class="muted">按键、命令、注意事项与使用明细，点击下方入口直接查看。</p>
-    <div class="quick-links">
-      <a class="btn" href="#keys">通用按键</a>
-      <a class="btn" href="#gameCommands">公屏命令</a>
-      <a class="btn" href="#qqCommands">QQ群命令</a>
-      <a class="btn" href="#funCommands">娱乐玩法</a>
-      <a class="btn" href="#precautions">注意事项</a>
-      <a class="btn" href="#usage">使用明细</a>
+    <div class="section-title"><span class="section-number">01</span><h2>基础教程</h2></div>
+    <p class="muted">按键 · 命令 · 注意事项 · 使用明细</p>
+    <nav class="subnav" aria-label="教程分类">
+      <a href="#keys">通用按键</a><a href="#gameCommands">公屏命令</a>
+      <a href="#qqCommands">QQ群命令</a><a href="#funCommands">娱乐玩法</a>
+      <a href="#farmCommands">农场种植</a><a href="#fishCommands">休闲钓鱼</a>
+    </nav>
+
+    <div class="subsection" id="keys">
+      <h3>一、全服通用按键项</h3>
+      <div class="key-grid">
+        <article class="key-card"><strong><kbd>F2</kbd>天宫造物</strong><p>随身工作台！用于制作各种物品。</p></article>
+        <article class="key-card"><strong><kbd>F2</kbd>专属核心</strong><p>激活、召唤专属。召唤过一次后，可长按 <kbd>F</kbd> 进行快捷召唤。</p></article>
+        <article class="key-card"><strong><kbd>F6</kbd>商城</strong><p>【金币商城】【点卷商城】购买物品；【礼包】内置许多实用礼包，助你快速发育；【回收商城】以物换物；【任务系统】每日刷新。</p></article>
+        <article class="key-card"><strong><kbd>F9</kbd>福利与副本</strong><p>包含【战令】【签到】【副本】玩法福利。<strong>副本简介与注意事项请认真查看！</strong></p></article>
+        <article class="key-card"><strong><kbd>长按 Y</kbd>云端背包</strong><p>召唤云端背包，你最安全的小金库。</p></article>
+      </div>
     </div>
 
-    <h3 id="keys">1 · 全服通用按键</h3>
-    <div class="key-grid">
-      <article class="key-card">
-        <h4><kbd>F2</kbd>天宫造物</h4>
-        <p>随身工作台，用于制作各种物品。</p>
-      </article>
-      <article class="key-card">
-        <h4><kbd>F2</kbd>专属核心</h4>
-        <p>用于激活、召唤专属。召唤过一次后，可长按 <kbd>F</kbd> 快捷召唤。</p>
-      </article>
-      <article class="key-card">
-        <h4><kbd>F6</kbd>商城</h4>
-        <p>【金币商城】【点卷商城】用于购买物品；【礼包】提供发育所需礼包；【回收商城】以物换物；【任务系统】每日刷新。</p>
-      </article>
-      <article class="key-card">
-        <h4><kbd>F9</kbd>玩法与福利</h4>
-        <p>包含【战令】【签到】【副本】。请认真查看副本简介及注意事项！</p>
-      </article>
-      <article class="key-card">
-        <h4><kbd>长按 Y</kbd>云端背包</h4>
-        <p>召唤云端背包，你最安全的小金库。各VIP等级容量见赞助表。</p>
-      </article>
+    <div class="subsection" id="gameCommands">
+      <h3>二、公屏命令项</h3>
+      <p class="note">复制后在游戏公屏使用。QQ号、SteamID、金额、作物名等参数需替换成你的实际信息；方括号为参数提示。</p>
+      <div class="command-list" id="gameList"></div>
     </div>
 
-    <h3 id="gameCommands">2 · 游戏公屏命令</h3>
-    <div class="input-row">
-      <label for="qqNumber">你的QQ号</label>
-      <input id="qqNumber" type="text" inputmode="numeric" autocomplete="off" placeholder="输入QQ号生成绑定命令">
-      <button id="copyGameBind" type="button">复制我的绑定命令</button>
-    </div>
-    <div class="table-wrap" tabindex="0" role="region" aria-label="游戏公屏命令表，可横向滚动">
-      <table class="commands-table">
-        <thead><tr><th scope="col">命令 / 复制</th><th scope="col">作用与使用说明</th></tr></thead>
-        <tbody id="gameRows"></tbody>
-      </table>
+    <div class="subsection" id="qqCommands">
+      <h3>三、QQ群内命令</h3>
+      <div class="command-list" id="qqList"></div>
     </div>
 
-    <h3 id="qqCommands">3 · QQ群内命令</h3>
-    <div class="input-row">
-      <label for="steamId">你的SteamID</label>
-      <input id="steamId" type="text" inputmode="numeric" autocomplete="off" placeholder="输入17位SteamID">
-      <button id="copyQQBind" type="button">复制绑定命令</button>
-      <button id="copyQQBindShort" type="button">复制bd快捷命令</button>
+    <div class="subsection" id="funCommands">
+      <h3>四、娱乐玩法命令</h3>
+      <div class="command-list" id="funList"></div>
     </div>
-    <p class="table-hint">中文命令和快捷字母均可复制；绑定账号时，请使用你自己的SteamID。</p>
-    <div class="table-wrap" tabindex="0" role="region" aria-label="QQ群命令表，可横向滚动">
-      <table class="commands-table">
-        <thead><tr><th scope="col">命令 / 快捷字母</th><th scope="col">作用与使用说明</th></tr></thead>
-        <tbody id="qqRows"></tbody>
-      </table>
+    <div class="subsection" id="farmCommands">
+      <h3>鲜花作伴 · 农场种植</h3>
+      <div class="command-list" id="farmList"></div>
     </div>
-
-    <h3 id="funCommands">4 · 娱乐玩法命令</h3>
-    <div class="notice">保护最高开启5小时：普通保护6000金币/小时，高级保护20000金币/小时。</div>
-    <p class="table-hint">[方括号]表示需要替换的参数；“@用户”请在QQ群中选择实际玩家。快捷字母复制时会保留参数模板。</p>
-    <div class="table-wrap" tabindex="0" role="region" aria-label="娱乐玩法命令表，可横向滚动">
-      <table class="commands-table">
-        <thead><tr><th scope="col">命令 / 快捷字母</th><th scope="col">作用与示例</th></tr></thead>
-        <tbody id="funRows"></tbody>
-      </table>
-    </div>
-
-    <h3 id="precautions">5 · 注意事项</h3>
-    <div class="info">
-      <p>① 游戏内公屏签到与QQ群签到一致，每日凌晨 <strong>00:00</strong> 更新。</p>
-      <p>② 游戏绑定格式：<code>/绑定 QQ号</code>；群内账号绑定格式：<code>绑定 SteamID</code> 或 <code>bd SteamID</code>。命令和账号之间有一个空格。</p>
-      <p>③ F9副本简介及注意事项请认真阅读；存在不确定性的玩法，请先阅读对应项目提醒再操作。</p>
-      <p>④ 金币、点卷、挂机金币、云端背包容量非累计叠加；金币、点卷按补差规则处理。</p>
-      <p>⑤ 进入游戏即代表已完整阅读并同意服务器规则，详细要求见 <a href="#rules">服务器规则</a>。</p>
-    </div>
-
-    <h3 id="usage">6 · 使用明细快捷入口</h3>
-    <div class="quick-links">
-      <a class="btn" href="#sponsor">VIP资源 / 价格 / 背包容量</a>
-      <a class="btn" href="#privileges">VIP功能特权</a>
-      <a class="btn" href="#attributes">人物与专属属性</a>
-      <a class="btn" href="#equipment">装备与使用权限</a>
-      <a class="btn" href="#guides">进群 / 抽奖 / 找服主</a>
+    <div class="subsection" id="fishCommands">
+      <h3>临水听风 · 休闲钓鱼</h3>
+      <div class="command-list" id="fishList"></div>
     </div>
   </section>
 
   <section class="panel" id="rules">
-    <div class="section-heading">
-      <h2>02 · 7377服务器规则</h2><span class="label">所有模组服务器通用</span>
-    </div>
-    <p>欢迎各位玩家进入7377服务器！本服数据互通，玩法多样，禁止恶意破坏、外挂、现金交易。</p>
-    <div class="notice">
-      进入游戏即代表完整阅读并同意以下全部服务器规则。不懂规则不作为违规免责理由。
-      所有违规由管理员取证判定，处罚标准统一，最终解释权归服主 / 管理团队所有。
-    </div>
-    <div class="quick-links">
-      <a class="btn" href="#rule1">基础规则</a>
-      <a class="btn" href="#rule2">建造占地</a>
-      <a class="btn" href="#rule3">恐龙管理</a>
-      <a class="btn" href="#rule4">VIP规则</a>
-      <a class="btn" href="#rule5">部落规则</a>
-      <a class="btn" href="#rule6">Boss与交易</a>
-      <a class="btn" href="#rule7">服务器问题</a>
-    </div>
-    <div class="rule-actions">
-      <button id="expandRules" type="button">展开全部规则</button>
-      <button id="collapseRules" type="button">收起全部规则</button>
-    </div>
-
-    <details class="rule" id="rule1" open>
+    <div class="section-title"><span class="section-number">02</span><h2>7377服务器规则</h2></div>
+    <p>欢迎各位玩家进入7377服务器！以下为本服所有模组服务器通用规则。</p>
+    <p class="note">本服数据互通，玩法多样，禁止恶意破坏、外挂、现金交易。进入游戏即代表完整阅读并同意以下全部服务器规则，不懂规则不作为违规免责理由。所有违规由管理员取证判定，处罚标准统一，最终解释权归服主 / 管理团队所有。</p>
+    <p class="muted">点击各条标题可收起或展开规则。</p>
+    <details class="rule" open>
       <summary>一、基础通用规则 · 全玩家强制遵守</summary>
-      <ol>
-        <li><strong>严禁外挂、BUG利用、第三方修改工具。</strong><br>
-          禁止任何透视、加速、刷物资、卡龙等级、穿墙mesh、卡地形漏洞、复制物资 / 恐龙等操作。
-          服主、管理不定时检查，发现直接全图建筑＋恐龙清空＋永久封禁，不给予申诉机会。
-        </li>
-        <li><strong>禁止现金线下交易。</strong><br>
-          龙、游戏货币、VIP不允许人民币买卖。查实线下交易，双方全部清空物资、封禁7天。
-        </li>
-        <li><strong>聊天、名字规范。</strong><br>
-          玩家名、部落名、恐龙名禁止低俗、辱骂、涉政、侮辱性文字，禁止假冒管理。
-          公屏禁止刷屏、吵架、人身攻击、引战、广告；违规先禁言，屡犯封禁。
-        </li>
-        <li><strong>公开安全场地与新人保护。</strong><br>
-          服主家、活动场地等公开安全场地禁止招龙、杀人、辱骂、抢夺他人物品。
-          禁止故意引Boss围堵他人家园、堵传送器；新人新手保护期间禁止压榨、刁难、堵杀，违反一律处罚。
-        </li>
-      </ol>
+      <div class="rule-body">
+        <p><strong>别出了事再来翻规则说不知道！</strong></p>
+        <ol>
+          <li><strong>严禁外挂、BUG利用、第三方修改工具。</strong>禁止任何透视、加速、刷物资、卡龙等级、穿墙 mesh、卡地形漏洞、复制物资 / 恐龙等操作。服主、管理不定时检查，发现直接全图建筑 + 恐龙清空 + 永久封禁，不给予申诉机会。</li>
+          <li><strong>禁止现金线下交易。</strong>龙、游戏货币、VIP不允许人民币买卖。查实线下交易，双方全部清空物资、封禁7天。</li>
+          <li><strong>聊天、名字规范。</strong>玩家名、部落名、恐龙名禁止低俗、辱骂、涉政、侮辱性文字，禁止假冒管理；公屏禁止刷屏、吵架、人身攻击、引战、广告。违规先禁言，屡犯封禁。</li>
+          <li><strong>特殊场景与新人保护。</strong>服主家、活动场地等公开安全场地禁止招龙、杀人、辱骂、抢夺他人物品。禁止故意引BOSS围堵他人家园、堵传送器；新人新手保护期间禁止压榨、刁难、堵杀，违反一律处罚。</li>
+        </ol>
+      </div>
     </details>
-    <details class="rule" id="rule2" open>
+    <details class="rule" open>
       <summary>二、建造占地规则 · 重点抽查项</summary>
-      <ol>
-        <li>部落每张地图仅允许<strong>1处主基地</strong>，禁止全图遍地铺地基、柱子圈地占资源点。</li>
-        <li>通道禁止使用无敌建筑封堵。禁止使用无敌浮空岛与其他无敌建筑堵住矿洞入口，或将两个无敌建筑合并，<strong>即使留出口也不允许</strong>。
-          方尖碑（OB）、资源矿点、出生复活点禁止建家；临时建筑使用完毕必须拆除。</li>
-        <li>禁止与盟友家的炮相邻，不可摆放炮塔打Boss。攻打他人基地可摆炮塔做临时战地，但结束必须拆除；不可无故放炮塔围堵、恶心他人基地。</li>
-        <li>禁止卡山体、隐形地基、浮空地基、结界BUG、副本Boss结界；不可退部落卡被限制的建筑上限。发现直接拆除并予处罚。</li>
-        <li>禁止流氓玩法：不建家、不做防御，只藏小金库、只抄家。<strong>必须建家并有防御，否则不可攻击他人家园！</strong></li>
-      </ol>
+      <div class="rule-body"><ol>
+        <li>部落每张地图仅允许1处主基地，禁止全图遍地铺地基、柱子圈地占资源点。</li>
+        <li>通道禁止使用无敌建筑封堵。别自作聪明使用无敌浮空岛与其他无敌建筑堵住矿洞入口，或将两个无敌建筑合并，就算留出口也不允许！方尖碑（OB）、资源矿点、出生复活点禁止建家；临时建筑使用完毕必须拆除。</li>
+        <li>禁止与盟友家的炮相邻，不可摆放炮塔打BOSS。攻打他人基地可摆炮塔做临时战地，但结束必须拆除！不可无故放炮塔围堵、恶心他人基地。</li>
+        <li>禁止卡山体、隐形地基、浮空地基、结界BUG、副本BOSS结界。不可退部落卡被限制的建筑上限，发现直接拆除并予处罚。</li>
+        <li>禁止流氓玩法：不建家、不做防御，进来只藏小金库、只抄家。必须建家且有防御，否则不可攻击他人家园！</li>
+      </ol></div>
     </details>
-    <details class="rule" id="rule3" open>
+    <details class="rule" open>
       <summary>三、恐龙管理问题</summary>
-      <ol><li>禁止卡龙无敌、龙的属性、龙的攻击。发现直接收回该恐龙及专属。</li></ol>
+      <div class="rule-body"><ol><li>禁止卡龙无敌、龙的属性、龙的攻击，发现直接收回该恐龙及专属。</li></ol></div>
     </details>
-    <details class="rule" id="rule4" open>
+    <details class="rule" open>
       <summary>四、VIP规则</summary>
-      <ol><li>VIP仅限充值本人账号使用，禁止别人使用和赠送给别人VIP。</li></ol>
+      <div class="rule-body"><ol><li>VIP仅限充值本人账号使用，禁止别人使用和赠送给别人VIP。</li></ol></div>
     </details>
-    <details class="rule" id="rule5" open>
+    <details class="rule" open>
       <summary>五、部落规则</summary>
-      <ol><li>部落人数上限<strong>6人</strong>，防止部落人数过多垄断全服资源。</li></ol>
+      <div class="rule-body"><ol><li>部落人数上限6人，防止部落人数过多垄断全服资源。</li></ol></div>
     </details>
-    <details class="rule" id="rule6" open>
+    <details class="rule" open>
       <summary>六、Boss副本 · 资源交易</summary>
-      <ol><li>Boss掉落物品可以以物换物，禁止现金以及线下交易，查实封禁账号3天。</li></ol>
+      <div class="rule-body"><ol><li>BOSS掉落物品可以以物换物，禁止现金以及线下交易，查实封禁账号3天。</li></ol></div>
     </details>
-    <details class="rule" id="rule7" open>
-      <summary>七、服务器问题 · 举报与反馈</summary>
-      <ol>
-        <li>如发现有人违规，请及时截图、录屏保留证据，向服主或管理举报。只看证据，不看片面之词，核实无误后进行处罚。
-          严重者踢出服务器，对方<strong>50%的物资、金币、点卷</strong>归举报者作为奖励；
-          较轻者前述所有物品<strong>20%</strong>归举报者作为奖励。</li>
-        <li>玩家自身操作损失不给处理。游戏内有不确定性的玩法项目会备注提醒，务必阅读、观察后再执行。</li>
-        <li>服务器规则会随着版本更新和时长微调。更新后群内发公告，生效后全体玩家自觉遵守。</li>
-        <li>服主本人也是老玩家，如有什么好想法、好建议，可私聊详谈。
-          对某方面不满、受委屈、玩得不开心，也欢迎来倾诉。
-          某些规则是死的，人是活的；某些因自身操作造成的损失也可进行补偿。</li>
-      </ol>
+    <details class="rule" open>
+      <summary>七、服务器问题 · 举报与建议</summary>
+      <div class="rule-body"><ol>
+        <li>如发现有人违规，请及时截图、录屏保留证据，向服主或管理举报。只看证据，不看片面之词，核实无误后进行处罚。严重者踢出服务器，对方50%的物资、金币、点卷归你作为奖励；较轻者，前述所有物品的20%归你作为奖励。</li>
+        <li>玩家自身操作损失不给处理。游戏内有不确定性的玩法项目会备注提醒，务必阅读、观察后再执行玩法项目。</li>
+        <li>服务器规则会随着版本更新和时长微调。更新后群内发公告，生效后全体玩家自觉遵守规则。</li>
+        <li>服主本人也是老玩家，如有什么好想法、好建议，可私聊详谈；或者对某方面不满、受委屈、玩得不开心，也欢迎来打扰倾诉。某些规则是死的，人是活的；某些因自身操作造成的损失也可进行补偿。</li>
+      </ol></div>
     </details>
   </section>
 
   <section class="panel" id="sponsor">
-    <div class="section-heading">
-      <h2>03 · 7377赞助表</h2><span class="label">VIP全服互通</span>
-    </div>
-    <p>所有VIP全服互通可用，价格可谈，可补差价。后续VIP物品数量或有变动，更多特权会持续更新添加。</p>
-    <div class="notice">
-      金币、点卷、挂机金币、云端背包容量<strong>非累计叠加</strong>，金币、点卷补差。理性支持、理性消费，感谢支持！
-    </div>
-    <p class="table-hint">表格可左右滑动查看完整资源、装备使用权及价格。</p>
+    <div class="section-title"><span class="section-number">03</span><h2>7377赞助表</h2></div>
+    <p>所有VIP全服互通可用，价格可谈！后续VIP物品数量或有变动，更多特权后续会持续更新添加。</p>
+    <p class="note">金币、点卷、挂机金币、云端背包容量非累计叠加；金币、点卷补差。VIP价格可补差价。<strong>理性支持，理性消费，感谢支持！</strong></p>
     <div class="table-wrap" tabindex="0" role="region" aria-label="VIP赞助表，可横向滚动">
-      <table class="vip-table">
-        <thead>
-          <tr>
-            <th scope="col">VIP等级</th>
-            <th scope="col">赠送金币</th>
-            <th scope="col">赠送点卷</th>
-            <th scope="col">挂机 / 10分钟</th>
-            <th scope="col">云端容量</th>
-            <th scope="col">装备 / 武器权益</th>
-            <th scope="col">价格 · 可补差</th>
-          </tr>
-        </thead>
-        <tbody id="sponsorRows"></tbody>
+      <table>
+        <thead><tr><th scope="col">VIP等级</th><th scope="col">全服通用资源与使用权</th><th scope="col">价格 · 可补差价</th></tr></thead>
+        <tbody id="sponsorBody"></tbody>
       </table>
     </div>
-    <p class="table-hint">“注”理性消费！理性支持！概不退款</p>
   </section>
 
   <section class="panel" id="privileges">
-    <div class="section-heading">
-      <h2>04 · VIP特权明细</h2><span class="label">全服生效</span>
-    </div>
+    <div class="section-title"><span class="section-number">04</span><h2>VIP特权明细</h2></div>
+    <p class="note">VIP特权全服生效，各等级明细如下。</p>
     <div class="table-wrap" tabindex="0" role="region" aria-label="VIP特权表，可横向滚动">
-      <table class="attributes-table">
-        <thead><tr><th scope="col">VIP等级</th><th scope="col">功能特权明细</th></tr></thead>
-        <tbody id="privilegeRows"></tbody>
-      </table>
+      <table><thead><tr><th scope="col">VIP等级</th><th scope="col">VIP特权明细</th></tr></thead><tbody id="privilegeBody"></tbody></table>
     </div>
   </section>
 
   <section class="panel" id="attributes">
-    <div class="section-heading">
-      <h2>05 · VIP人物 &amp; 专属属性</h2><span class="label">百分比加成 · 全服生效</span>
-    </div>
-    <div class="info">
-      人物整体属性包含：生命、耐力、眩晕、氧气、食物、水量、负重、攻击、移速、抗性、制作。
-    </div>
+    <div class="section-title"><span class="section-number">05</span><h2>VIP属性明细</h2></div>
+    <p class="note">7377【人物 &amp; 专属】属性明细均为百分比加成，全服生效！</p>
+    <p>人物属性范围：生命、耐力、眩晕、氧气、食物、水量、负重、攻击、移速、抗性、制作。</p>
     <div class="table-wrap" tabindex="0" role="region" aria-label="VIP属性表，可横向滚动">
-      <table class="attributes-table">
-        <thead><tr><th scope="col">VIP等级</th><th scope="col">人物整体属性增加</th><th scope="col">专属攻击伤害增加</th></tr></thead>
-        <tbody id="attributeRows"></tbody>
-      </table>
+      <table><thead><tr><th scope="col">VIP等级</th><th scope="col">人物整体属性加成</th><th scope="col">专属攻击伤害倍率</th></tr></thead><tbody id="attributeBody"></tbody></table>
     </div>
   </section>
 
   <section class="panel" id="equipment">
-    <div class="section-heading">
-      <h2>06 · 装备属性明细</h2><span class="label">全服生效 · 从上至下进阶</span>
-    </div>
-    <div class="notice">
-      【防御护甲】为<strong>单件</strong>数值，整套护甲＝单件 × 5。
-      其余属性需成套才生效；成套无限能量，无需能量元素。
-    </div>
-    <p class="table-hint">伤害、范围对应右键蓄力；敏捷对应移速；恢复对应脱战回血；受伤倍率表示承受的伤害比例。</p>
+    <div class="section-title"><span class="section-number">06</span><h2>装备属性明细</h2></div>
+    <p class="note">7377装备属性表全服生效。【防御护甲】为单件属性，实际一套属性 × 5；其余属性一套才可生效！<strong>成套无限能量，无需能量元素。</strong></p>
+    <p class="muted">装备按所给顺序展示，越往下等级越高。宽表可左右滑动查看。</p>
     <div class="table-wrap" tabindex="0" role="region" aria-label="装备属性表，可横向滚动">
-      <table class="equipment-table">
-        <thead>
-          <tr>
-            <th scope="col">装备名称</th>
-            <th scope="col">单件护甲</th>
-            <th scope="col">整套护甲 ×5</th>
-            <th scope="col">伤害倍率<br>右键蓄力</th>
-            <th scope="col">范围倍率<br>右键蓄力</th>
-            <th scope="col">敏捷倍率<br>移速</th>
-            <th scope="col">恢复倍率<br>脱战回血</th>
-            <th scope="col">受伤倍率 / 减伤</th>
-            <th scope="col">可使用权</th>
-          </tr>
-        </thead>
-        <tbody id="equipmentRows"></tbody>
+      <table>
+        <thead><tr>
+          <th scope="col">装备名称</th><th scope="col">防御护甲<br>单件</th>
+          <th scope="col">伤害倍率<br>右键蓄力</th><th scope="col">范围倍率<br>右键蓄力</th>
+          <th scope="col">敏捷倍率<br>移速</th><th scope="col">恢复倍率<br>脱战回血</th>
+          <th scope="col">受伤倍率<br>百分比承伤</th><th scope="col">可使用权</th>
+        </tr></thead><tbody id="equipmentBody"></tbody>
       </table>
     </div>
   </section>
 
   <section class="panel" id="guides">
-    <div class="section-heading">
-      <h2>07 · 其他指南</h2><span class="label">进群 · 其他服 · 抽奖 · 找服主</span>
-    </div>
-    <div class="guide-grid">
-      <article class="guide-card" id="joinGroup">
-        <h3 style="margin:0">💬 7377萌新服务器</h3>
-        <p>加入群聊，交流玩法、查看群公告与服务器动态。</p>
-        <a class="btn gold" href="https://qm.qq.com/q/tUjNnSJAl2" target="_blank" rel="noopener noreferrer">点击加入群聊 ↗</a>
-      </article>
-      <article class="guide-card" id="lottery">
-        <h3 style="margin:0">🎁 卡密抽奖</h3>
-        <p>前往卡密抽奖页面；游戏内使用 /领取邮件 领取抽奖、卡密获取的物品。</p>
-        <a class="btn" href="https://buy.jry0.com/shop/ARK7377" target="_blank" rel="noopener noreferrer">打开卡密抽奖 ↗</a>
-      </article>
-      <article class="guide-card" id="owner">
-        <h3 style="margin:0">👑 联系服主</h3>
-        <p>玩法建议、问题反馈、举报证据与其他沟通，可通过此入口联系服主。</p>
-        <a class="btn" href="https://qm.qq.com/q/3xOcBvKhiw" target="_blank" rel="noopener noreferrer">联系服主 ↗</a>
-      </article>
-    </div>
-    <h3 id="otherServers">其他服务器入口</h3>
-    <div class="server-links">
-      <a class="btn" href="https://7377yyds.github.io/DLdl" target="_blank" rel="noopener noreferrer">🔱斗罗服🔱 ↗</a>
-      <a class="btn" href="https://7377yyds.github.io/GDYZ" target="_blank" rel="noopener noreferrer">🤖高达服🤖 ↗</a>
-      <a class="btn" href="https://7377yyds.github.io/Hzw" target="_blank" rel="noopener noreferrer">🏴‍☠️海贼王服【即将开放】🏴‍☠️ ↗</a>
-      <a class="btn" href="https://7377yyds.github.io/Hhuang" target="_blank" rel="noopener noreferrer">⚔️洪荒服⚔️【敬请期待】 ↗</a>
-      <a class="btn" href="https://7377yyds.github.io/Qy" target="_blank" rel="noopener noreferrer">⚔️起源服⚔️【敬请期待】 ↗</a>
+    <div class="section-title"><span class="section-number">07</span><h2>其他指南</h2></div>
+    <p>进群 · 其他服 · 抽奖 · 找服主</p>
+    <div class="links-grid">
+      <a class="link-card" href="https://qm.qq.com/q/tUjNnSJAl2" target="_blank" rel="noopener noreferrer"><strong>🌸 加入QQ群 ↗</strong><span>7377萌新服务器 · 共赴方舟</span></a>
+      <a class="link-card" href="https://buy.jry0.com/shop/ARK7377" target="_blank" rel="noopener noreferrer"><strong>🎁 卡密抽奖 ↗</strong><span>前往卡密抽奖页面</span></a>
+      <a class="link-card" href="https://qm.qq.com/q/3xOcBvKhiw" target="_blank" rel="noopener noreferrer"><strong>🍵 联系服主 ↗</strong><span>咨询 · 建议 · 反馈</span></a>
+      <a class="link-card" href="https://7377yyds.github.io/DLdl" target="_blank" rel="noopener noreferrer"><strong>✨ 斗罗服 ↗</strong><span>查看斗罗服指南</span></a>
+      <a class="link-card" href="https://7377yyds.github.io/GDYZ" target="_blank" rel="noopener noreferrer"><strong>🤖 高达服 ↗</strong><span>查看高达服指南</span></a>
+      <a class="link-card" href="https://7377yyds.github.io/Hzw" target="_blank" rel="noopener noreferrer"><strong>⛵ 海贼王服 ↗</strong><span>即将开放</span></a>
+      <a class="link-card" href="https://7377yyds.github.io/Hhuang" target="_blank" rel="noopener noreferrer"><strong>🏔️ 洪荒服 ↗</strong><span>敬请期待</span></a>
+      <a class="link-card" href="https://7377yyds.github.io/Qy" target="_blank" rel="noopener noreferrer"><strong>🌿 起源服 ↗</strong><span>敬请期待</span></a>
     </div>
   </section>
 
-  <footer>
-    👑 ARK7377总览 👑 · 🎉加入7377共赴方舟🎉<br>
-    服务器规则调整以群内公告为准 · 理性支持，快乐游戏
+  <footer class="footer">
+    <strong>ARK <span class="flow number">7377</span> · 山海共此时</strong>
+    <p>愿你在方舟的每一场相遇，都如春日繁花。</p>
+    <p class="muted">服务器规则更新后以群内公告为准 · 理性支持，快乐游戏</p>
   </footer>
+  <noscript><p class="note">请启用浏览器JavaScript，以查看完整命令、VIP及装备表格，并使用复制与特效控制。</p></noscript>
 </main>
-<a class="btn back-top" href="#home" aria-label="返回顶部">↑ 顶部</a>
+
+<section class="controls" aria-label="画面与特效控制">
+  <div class="control-head">
+    <span>✦ 意境 · 画境控制</span>
+    <button id="controlToggle" type="button" aria-controls="controlBody" aria-expanded="true">收起 ▾</button>
+  </div>
+  <div id="controlBody" class="control-body">
+    <div class="control-buttons">
+      <button class="ui-button" id="playToggle" type="button">播放视频</button>
+      <button class="ui-button" id="flowerToggle" type="button" aria-pressed="true">鲜花弹幕：开</button>
+      <button class="ui-button" id="opacityToggle" type="button" aria-pressed="true">透明调节：开</button>
+      <button class="ui-button" id="fxToggle" type="button" aria-pressed="true">流光特效：开</button>
+    </div>
+    <label class="range-label" for="opacityRange"><span>视频透明度</span><output id="opacityValue" for="opacityRange">32%</output></label>
+    <input id="opacityRange" type="range" min="0" max="100" value="32" aria-label="视频透明度，0为完全不透明，100为完全透明">
+    <p class="status" id="videoStatus" role="status">山水视频准备中</p>
+    <a class="to-top" href="#home">↑ 返回首页</a>
+  </div>
+</section>
+
 <div id="toast" role="status" aria-live="polite" hidden></div>
+<dialog id="copyDialog" aria-labelledby="copyTitle">
+  <strong id="copyTitle">请手动复制命令</strong>
+  <p class="muted">浏览器限制了自动复制，请选中文字后复制。</p>
+  <input id="manualCopy" type="text" readonly aria-label="待复制命令">
+  <form method="dialog"><button class="ui-button">关闭</button></form>
+</dialog>
 
 <script>
 "use strict";
-const $ = selector => document.querySelector(selector);
-const $$ = selector => Array.from(document.querySelectorAll(selector));
+const $ = id => document.getElementById(id);
+const make = (tag, className, text) => {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined) el.textContent = text;
+  return el;
+};
 
-function readSetting(key, fallback){
-  try{
-    const raw=localStorage.getItem(key);
-    return raw===null ? fallback : JSON.parse(raw);
-  }catch{return fallback;}
-}
-function saveSetting(key,value){
-  try{localStorage.setItem(key,JSON.stringify(value));}catch{}
-}
-function escapeHTML(value){
-  return String(value).replace(/[&<>"']/g,character=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[character]);
-}
-
-/* 目录 */
-const navigation=[
-  ["home","✦ 总览首页"],
-  ["tutorial","01 基础教程"],
-  ["keys","⌨ 全服通用按键"],
-  ["gameCommands","▸ 游戏公屏命令"],
-  ["qqCommands","▸ QQ群内命令"],
-  ["funCommands","✧ 娱乐玩法命令"],
-  ["precautions","! 注意事项"],
-  ["usage","▸ 使用明细"],
-  ["rules","02 服务器规则"],
-  ["sponsor","03 7377赞助表"],
-  ["privileges","04 VIP特权明细"],
-  ["attributes","05 VIP属性明细"],
-  ["equipment","06 装备属性明细"],
-  ["guides","07 其他指南"],
-  ["joinGroup","↗ 加入QQ群"],
-  ["lottery","↗ 卡密抽奖"],
-  ["owner","↗ 联系服主"],
-  ["otherServers","↗ 其他服务器"]
+/* 导航 */
+const sections = [
+  ["home","首页 · 山海之约"],
+  ["tutorial","基础教程"],
+  ["rules","服务器规则"],
+  ["sponsor","7377赞助表"],
+  ["privileges","VIP特权明细"],
+  ["attributes","VIP属性明细"],
+  ["equipment","装备属性明细"],
+  ["guides","其他指南"]
 ];
-const navHTML=navigation.map(([id,label])=>
-  `<a href="#${id}">${escapeHTML(label)}</a>`
-).join("");
-$("#topLinks").innerHTML=navHTML;
-$("#sideLinks").innerHTML=navHTML;
-
-const narrowScreen=matchMedia("(max-width:850px)");
-function setSidebar(open,remember=true){
-  document.body.classList.toggle("side-collapsed",!open);
-  $("#sidebar").hidden=!open;
-  $("#sideToggle").setAttribute("aria-expanded",String(open));
-  $("#sideOpen").setAttribute("aria-expanded",String(open));
-  if(remember)saveSetting("ark7377-sidebar",open);
+for (const target of ["topNav","sideNav"]) {
+  for (const [id,label] of sections) {
+    const a = make("a","nav-link",label);
+    a.href = "#" + id;
+    $(target).append(a);
+  }
 }
-setSidebar(narrowScreen.matches?false:readSetting("ark7377-sidebar",true),false);
-$("#sideToggle").addEventListener("click",()=>{
-  setSidebar(document.body.classList.contains("side-collapsed"));
+$("topToggle").addEventListener("click", () => {
+  const hidden = !$("topNav").hidden;
+  $("topNav").hidden = hidden;
+  $("topToggle").setAttribute("aria-expanded",String(!hidden));
+  $("topToggle").textContent = hidden ? "展开顶部目录 ▾" : "收起顶部目录 ▴";
 });
-$("#sideClose").addEventListener("click",()=>{
-  setSidebar(false);$("#sideOpen").focus();
+function setSidebar(collapsed) {
+  $("sidebar").classList.toggle("collapsed",collapsed);
+  $("sideContents").hidden = collapsed;
+  document.body.classList.toggle("compact-side",collapsed);
+  $("sideToggle").textContent = collapsed ? "目录 展开 ▸" : "收起 ◂";
+  $("sideToggle").setAttribute("aria-expanded",String(!collapsed));
+}
+setSidebar(window.matchMedia("(max-width:700px)").matches);
+$("sideToggle").addEventListener("click", () => {
+  setSidebar(!$("sidebar").classList.contains("collapsed"));
 });
-$("#sideOpen").addEventListener("click",()=>{
-  setSidebar(true);$("#sideClose").focus();
+$("sideNav").addEventListener("click",e => {
+  if (e.target.closest("a") && window.matchMedia("(max-width:700px)").matches) setSidebar(true);
 });
-function updateHeaderHeight(){
-  document.documentElement.style.setProperty(
-    "--header-height",$("#siteHeader").offsetHeight+"px"
-  );
+let navFrame = 0;
+function updateActive() {
+  let active = "home";
+  for (const [id] of sections) {
+    if ($(id).getBoundingClientRect().top <= 190) active = id;
+  }
+  document.querySelectorAll(".nav-link").forEach(a => {
+    const current = a.getAttribute("href") === "#" + active;
+    a.classList.toggle("active",current);
+    if (current) a.setAttribute("aria-current","location");
+    else a.removeAttribute("aria-current");
+  });
+  navFrame = 0;
 }
-function setTopMenu(open){
-  $("#topMenu").hidden=!open;
-  $("#topToggle").setAttribute("aria-expanded",String(open));
-  $("#topToggle").textContent=open?"顶部目录 ▴":"顶部目录 ▾";
-  updateHeaderHeight();
-}
-$("#topToggle").addEventListener("click",()=>setTopMenu($("#topMenu").hidden));
-if("ResizeObserver" in window){
-  new ResizeObserver(updateHeaderHeight).observe($("#siteHeader"));
-}
-window.addEventListener("resize",updateHeaderHeight);
-updateHeaderHeight();
+window.addEventListener("scroll",() => {
+  if (!navFrame) navFrame = requestAnimationFrame(updateActive);
+},{passive:true});
+updateActive();
 
-/* 命令表：复制内容与显示内容保持一致 */
-function copyButton(text,label="复制"){
-  return `<button type="button" class="copy-btn" data-copy="${escapeHTML(text)}">${label}</button>`;
+/* 命令格式：[命令、说明、快捷命令、可选示例] */
+const gameCommands = [
+  ["/自杀","游戏角色自杀，CD10秒。"],
+  ["/绑定 QQ号","绑定游戏自动领取VIP。“/绑定”后加空格，再输入您的QQ号。"],
+  ["/领取邮件","领取抽奖、卡密获取的物品。"],
+  ["/签到","游戏公屏命令与群内签到一致，凌晨00:00更新。"]
+];
+const qqCommands = [
+  ["签到","打卡签到得奖励，与游戏内签到一致，凌晨00:00更新。","qd"],
+  ["绑定 SteamID","绑定SteamID账号。绑定或bd后加一个空格，再输入SteamID。","bd SteamID","绑定 76552013147377666"],
+  ["我的信息","查看个人资料。","wdxx"],
+  ["金币","查询金币余额。","wdjb"],
+  ["钻石","查询钻石余额。","wdzs"],
+  ["会员","查询会员状态。","hy"],
+  ["下线","强制自己下线，用于卡UI、卡角色等情况。","xx"],
+  ["直连","获取服务器连接。","zl"],
+  ["自杀","游戏内自杀。"]
+];
+const funCommands = [
+  ["打劫 @用户","打劫其他玩家，对方金币越多，得到的越多。使用时请在QQ群中实际@目标用户。","dj @用户"],
+  ["保护 [类型] [小时]","防打劫保护：普通保护6000金币/小时，高级保护20000金币/小时，最高开启5小时。","bh [类型] [小时]","保护 普通 5"],
+  ["摇骰子 [大/小/豹子/点数] [金额]","摇骰子猜大小，请选择一种押注类型并填写金额。","ysz [大/小/豹子/点数] [金额]"],
+  ["猜数字 [金额]","开始猜数字游戏，填写参与金额。","csz [金额]"],
+  ["猜 [数字]","猜测数字，填写你要猜的数字。"],
+  ["放弃猜数字","放弃当前猜数字游戏。","fqcsz"]
+];
+const farmCommands = [
+  ["农场种植","进入农场。","nczz"],
+  ["农场信息","查看农场信息。","ncxx"],
+  ["农场播种 [作物名]","播种指定作物。","ncbo [作物名]"],
+  ["农场浇水","浇水。","ncjs"],
+  ["农场收获","收获作物。","ncsh"],
+  ["农场偷菜 @用户","偷菜，请在QQ群中实际@目标用户。","nctc @用户"],
+  ["雇佣农场狗狗 [狗狗名]","雇佣狗狗。","gyncgg [狗狗名]"],
+  ["续约农场狗狗","续约狗狗。","xyncgg"],
+  ["升级农场","升级农场。","sjjnc"],
+  ["农场图鉴","查看图鉴。","nctj"],
+  ["农场恢复体力","恢复体力。","nchftl"],
+  ["农场帮助","查看帮助。","ncbz"]
+];
+const fishCommands = [
+  ["钓鱼","开始钓鱼。","dy"],
+  ["我的钓鱼","查看钓鱼信息。","wddy"],
+  ["我的鱼竿","查看鱼竿。","wdyg"],
+  ["升级鱼竿","升级鱼竿。","sjyg"],
+  ["购买鱼饵 [数量]","购买指定数量的鱼饵。","gmye [数量]"],
+  ["钓鱼图鉴","查看图鉴。","dytj"],
+  ["钓鱼天气","查看天气。","dytq"]
+];
+function copyButton(label,value,shortcut=false) {
+  const button = make("button","copy-btn"+(shortcut?" shortcut":""),label);
+  button.type = "button";
+  button.dataset.copy = value;
+  button.setAttribute("aria-label","复制：" + value);
+  return button;
 }
-function commandRow(command,alias,description){
-  return `<tr><td>
-    <div class="command-line"><code>${escapeHTML(command)}</code>${copyButton(command)}</div>
-    ${alias?`<span class="alias">快捷：<code>${escapeHTML(alias)}</code>${copyButton(alias,"复制快捷")}</span>`:""}
-    </td><td>${escapeHTML(description)}</td></tr>`;
+function renderCommands(id,rows) {
+  const fragment = document.createDocumentFragment();
+  for (const [command,description,shortcut,example] of rows) {
+    const row = make("div","command-row");
+    const content = make("div");
+    content.append(make("strong","",command));
+    content.append(make("p","",description));
+    if (shortcut) content.append(make("p","muted","快捷命令：" + shortcut));
+    if (example) content.append(make("p","muted","示例：" + example));
+    const buttons = make("div","copy-buttons");
+    buttons.append(copyButton("复制命令",command));
+    if (shortcut) buttons.append(copyButton("复制 " + shortcut.split(" ")[0],shortcut,true));
+    if (example) buttons.append(copyButton("复制示例",example));
+    row.append(content,buttons);
+    fragment.append(row);
+  }
+  $(id).append(fragment);
 }
-const gameCommands=[
-  ["/自杀","","游戏内自杀，CD 10秒。"],
-  ["/绑定 [QQ号]","","绑定游戏自动领取VIP；/绑定 后加一个空格，再输入自己的QQ号。可用上方输入框生成完整命令。"],
-  ["/领取邮件","","领取抽奖、卡密获取的物品。"],
-  ["/签到","","与QQ群签到一致，每日凌晨00:00更新。"]
-];
-const qqCommands=[
-  ["签到","qd","打卡签到得奖励，与游戏内签到一致，每日凌晨00:00更新。"],
-  ["绑定 [SteamID]","bd [SteamID]","绑定SteamID账号。示例：绑定 76552013147377666 或 bd 76552013147377666；请换成自己的账号。"],
-  ["我的信息","wdxx","查看个人资料。"],
-  ["金币","wdjb","查询金币余额。"],
-  ["钻石","wdzs","查询钻石余额。"],
-  ["会员","hy","查询会员状态。"],
-  ["下线","xx","强制自己下线，用于卡UI、卡角色等情况。"],
-  ["直连","zl","获取服务器连接。"],
-  ["自杀","","游戏内自杀。"]
-];
-const funCommands=[
-  ["打劫 @用户","dj @用户","打劫其他玩家，对方金币越多，得到的越多。"],
-  ["保护 [类型] [小时]","bh [类型] [小时]","防打劫保护。普通6000金币/小时，高级20000金币/小时，最高5小时。示例：保护 普通 5。"],
-  ["摇骰子 [大/小/豹子/点数] [金额]","ysz [大/小/豹子/点数] [金额]","摇骰子猜大小，选择大、小、豹子或点数，并填写金额。"],
-  ["猜数字 [金额]","csz [金额]","开始猜数字游戏。"],
-  ["猜 [数字]","","在猜数字游戏中提交猜测的数字。"],
-  ["放弃猜数字","fqcsz","放弃当前猜数字游戏。"],
-  ["农场种植","nczz","进入农场。"],
-  ["农场信息","ncxx","查看农场信息。"],
-  ["农场播种 [作物名]","ncbo [作物名]","播种指定作物。"],
-  ["农场浇水","ncjs","浇水。"],
-  ["农场收获","ncsh","收获作物。"],
-  ["农场偷菜 @用户","nctc @用户","偷菜。"],
-  ["雇佣农场狗狗 [狗狗名]","gyncgg [狗狗名]","雇佣指定狗狗。"],
-  ["续约农场狗狗","xyncgg","续约狗狗。"],
-  ["升级农场","sjjnc","升级农场。"],
-  ["农场图鉴","nctj","查看图鉴。"],
-  ["农场恢复体力","nchftl","恢复体力。"],
-  ["农场帮助","ncbz","查看帮助。"],
-  ["钓鱼","dy","开始钓鱼。"],
-  ["我的钓鱼","wddy","查看钓鱼信息。"],
-  ["我的鱼竿","wdyg","查看鱼竿。"],
-  ["升级鱼竿","sjyg","升级鱼竿。"],
-  ["购买鱼饵 [数量]","gmye [数量]","购买指定数量的鱼饵。"],
-  ["钓鱼图鉴","dytj","查看图鉴。"],
-  ["钓鱼天气","dytq","查看天气。"]
-];
-$("#gameRows").innerHTML=gameCommands.map(row=>commandRow(...row)).join("");
-$("#qqRows").innerHTML=qqCommands.map(row=>commandRow(...row)).join("");
-$("#funRows").innerHTML=funCommands.map(row=>commandRow(...row)).join("");
+renderCommands("gameList",gameCommands);
+renderCommands("qqList",qqCommands);
+renderCommands("funList",funCommands);
+renderCommands("farmList",farmCommands);
+renderCommands("fishList",fishCommands);
 
-/* 各等级独立的渐变色 */
-const palettes=[
-  ["#afffdd","#68cfbb","#e2fff0"],
-  ["#94eaff","#5bb7ff","#ddf7ff"],
-  ["#ebf4ff","#aebfe0","#ffffff"],
-  ["#ffe198","#e8ae46","#fff5ca"],
-  ["#afffbb","#4cdac5","#e5ffe6"],
-  ["#b9c2ff","#9a84ff","#f3d5ff"],
-  ["#ffb0be","#fb637e","#ffe2b8"],
-  ["#efbdff","#bf83ff","#a5e8ff"],
-  ["#ffd9a0","#ff9dcb","#d4baff"],
-  ["#ffeab0","#a7f7ff","#ffc1ed"],
-  ["#ffc6cd","#ff86aa","#fff0d1"]
+/* 不同等级配色：深色渐变保证米色底上的可读性 */
+const palettes = [
+  ["#32623e","#4a7c58","#846a23"],
+  ["#006d7b","#2862a2","#32795d"],
+  ["#43516d","#617588","#785886"],
+  ["#94611a","#b17c12","#80501b"],
+  ["#137563","#397b24","#426b94"],
+  ["#3157a2","#6949a3","#12728a"],
+  ["#80394d","#422d5b","#a44728"],
+  ["#8e3f84","#aa4a38","#6550aa"],
+  ["#a44524","#967016","#9c3263"],
+  ["#922566","#166f86","#996214"],
+  ["#a52a45","#903c79","#ac641d"]
 ];
-function rank(text,index){
-  const colors=palettes[index%palettes.length];
-  return `<span class="rank" style="--a:${colors[0]};--b:${colors[1]};--c:${colors[2]};animation-delay:-${index*.47}s">${escapeHTML(text)}</span>`;
+function coloredName(text,index,className="vip-name") {
+  const el = make("span","flow "+className,text);
+  const colors = palettes[index % palettes.length];
+  colors.forEach((color,i) => el.style.setProperty("--c"+(i+1),color));
+  el.style.animationDelay = (-index*.37)+"s";
+  return el;
 }
-const levels=["VIP1","VIP2","VIP3","VIP5","VIP6","VIP8","VIP9","SVIP1","SVIP2","SVIP3"];
-const sponsors=[
-  ["10万","—","1000",3,"—","游戏内绑定QQ免费获取"],
-  ["25万","100","2000",5,"—","20💵"],
-  ["50万","800","3000",8,"圣银御天套使用权","100💵"],
-  ["100万","1800","4000",10,"金耀御天套使用权","200💵"],
-  ["200万","4000","5000",14,"莹脉破虚套使用权","400💵"],
-  ["400万","6000","6000",18,"莹脉破虚套使用权","600💵"],
-  ["600万","8000","8000",22,"黑焰弑神套使用权","800💵"],
-  ["800万","12000","10000",26,"无极裂变套（男）、红叶惊鸿套（女）使用权；弑天魔剑使用权","1200💵"],
-  ["1200万","15000","15000",30,"无极裂变套（男）、红叶惊鸿套（女）使用权；弑天魔剑使用权","1500💵"],
-  ["1500万","24000","18000",35,"无极裂变套（男）、红叶惊鸿套（女）使用权；弑天魔剑使用权；定制专武1把","2388💵"]
+function cell(row,content,className="") {
+  const td = make("td",className);
+  if (content instanceof Node) td.append(content);
+  else td.textContent = String(content);
+  row.append(td);
+  return td;
+}
+function chipList(items) {
+  const container = make("div");
+  items.forEach(item => container.append(make("span","chip",item)));
+  return container;
+}
+/* 等级、金币万、点卷、每10分钟金币、背包、装备权、价格、人物%、专属% */
+const vips = [
+  ["VIP1",10,0,1000,3,"","游戏内绑定QQ免费获取",10,0],
+  ["VIP2",25,100,2000,5,"","20💵",20,0],
+  ["VIP3",50,800,3000,8,"圣银御天套使用权","100💵",30,0],
+  ["VIP5",100,1800,4000,10,"金耀御天套使用权","200💵",40,5],
+  ["VIP6",200,4000,5000,14,"莹脉破虚套使用权","400💵",50,10],
+  ["VIP8",400,6000,6000,18,"莹脉破虚套使用权","600💵",60,15],
+  ["VIP9",600,8000,8000,22,"黑焰弑神套使用权","800💵",70,20],
+  ["SVIP1",800,12000,10000,26,"无极裂变套（男）/ 红叶惊鸿套（女）使用权","1200💵",80,30],
+  ["SVIP2",1200,15000,15000,30,"无极裂变套（男）/ 红叶惊鸿套（女）使用权","1500💵",90,40],
+  ["SVIP3",1500,24000,18000,35,"无极裂变套（男）/ 红叶惊鸿套（女）使用权","2388💵",100,50]
 ];
-$("#sponsorRows").innerHTML=sponsors.map((row,i)=>`
-  <tr>
-    <td>${rank(levels[i],i)}</td>
-    <td>${row[0]}</td><td>${row[1]}</td><td>+${row[2]}金币</td><td>${row[3]}</td>
-    <td>${escapeHTML(row[4])}</td><td class="money">${row[5]}</td>
-  </tr>`).join("");
+const perks = ["一键捡包","一键腐烂","一键喂养","一键破壳","恢复新鲜","终端传送","补给传送","快捷跨服","宝箱传送","神器传送"];
+vips.forEach((v,i) => {
+  const [name,gold,points,idle,bag,equip,price,attr,damage] = v;
+  const resources = ["赠送"+gold+"万金币"];
+  if (points) resources.push("赠送点卷"+points);
+  resources.push("挂机十分钟 +"+idle+"金币");
+  if (equip) resources.push(equip);
+  if (i >= 7) resources.push("弑天魔剑使用权");
+  if (i === 9) resources.push("定制专武 1把");
+  resources.push("云端背包容量 "+bag);
+  const sponsorRow = make("tr");
+  cell(sponsorRow,coloredName(name,i));
+  cell(sponsorRow,chipList(resources),"resource");
+  cell(sponsorRow,price,"price");
+  $("sponsorBody").append(sponsorRow);
 
-const privilegeNames=[
-  "一键捡包","一键腐烂","一键喂养","一键破壳","恢复新鲜",
-  "终端传送","补给传送","快捷跨服","宝箱传送","神器传送"
-];
-$("#privilegeRows").innerHTML=levels.map((level,i)=>`
-  <tr><td>${rank(level,i)}</td><td><div class="perks">
-  ${privilegeNames.slice(0,i+1).map(name=>`<span class="perk">${name}</span>`).join("")}
-  </div></td></tr>`).join("");
+  const perkRow = make("tr");
+  cell(perkRow,coloredName(name,i));
+  cell(perkRow,chipList(perks.slice(0,i+1)));
+  $("privilegeBody").append(perkRow);
 
-const exclusiveBonuses=["无","无","无","5%","10%","15%","20%","30%","40%","50%"];
-$("#attributeRows").innerHTML=levels.map((level,i)=>`
-  <tr><td>${rank(level,i)}</td>
-  <td>+${(i+1)*10}%</td>
-  <td>${exclusiveBonuses[i]==="无"?"无":"+"+exclusiveBonuses[i]}</td></tr>`).join("");
-
-/* 装备属性，最后一项为最低可使用的VIP索引；-1表示所有人 */
-const equipment=[
+  const attrRow = make("tr");
+  cell(attrRow,coloredName(name,i));
+  cell(attrRow,"人物整体属性增加 "+attr+"%");
+  cell(attrRow,damage ? "专属伤害增加 "+damage+"%" : "无");
+  $("attributeBody").append(attrRow);
+});
+/* 名称、单件护甲、伤害、范围、敏捷、恢复、承伤、最低可用等级索引 */
+const equipment = [
   ["赤龙神恺套",1500,1,1,1,1,"无",-1],
   ["青冥战凯套",2000,1.2,1.2,1,1,"无",-1],
   ["蓝渊战铠套",2000,1.2,1.2,1.2,1.2,"无",-1],
@@ -1023,267 +782,228 @@ const equipment=[
   ["无极裂变套",8888,12,8,5,15,"0.6 · 减少40%伤害",7],
   ["红叶惊鸿套【女】",8888,12,8,5,15,"0.6 · 减少40%伤害",7]
 ];
-const gearPalettes=[
-  ["#ffab8b","#ff6679","#ffe1a3"],
-  ["#99f3ba","#53cca5","#d4ffea"],
-  ["#8bd9ff","#5994f3","#c9f4ff"],
-  ["#c8bcff","#a58af8","#f1d5ff"],
-  ["#d0b2ed","#b68ade","#ffb1cc"],
-  ["#f1f7ff","#adc5df","#ffffff"],
-  ["#ffe8a5","#e4ae43","#fff6ca"],
-  ["#a8ffd7","#55dfd1","#e3ffae"],
-  ["#ffacb2","#ff718d","#ffd1a2"],
-  ["#c6c0ff","#83e4ff","#ffbce6"],
-  ["#ffb8c8","#ff82ab","#ffe5c4"]
+const equipmentPalettes = [
+  ["#9b3c2b","#bb5b22","#7d352d"],
+  ["#286a50","#5e7928","#26707a"],
+  ["#1e5898","#127e99","#494c9a"],
+  ["#6c4893","#3f6f9b","#934d85"],
+  ["#48354d","#765064","#41545e"],
+  ["#4d6473","#657d83","#485777"],
+  ["#956517","#b07e22","#83531e"],
+  ["#087b70","#527a2b","#217091"],
+  ["#382844","#9b382d","#713454"],
+  ["#7141a1","#19778c","#a74b72"],
+  ["#a62b4c","#c05b24","#923c84"]
 ];
-function gearRank(text,i){
-  const c=gearPalettes[i];
-  return `<span class="rank" style="--a:${c[0]};--b:${c[1]};--c:${c[2]};animation-delay:-${i*.39}s">${escapeHTML(text)}</span>`;
-}
-$("#equipmentRows").innerHTML=equipment.map((row,i)=>{
-  const [name,armor,damage,range,speed,recovery,reduction,minLevel]=row;
-  const access=minLevel===-1?"所有人":levels.slice(minLevel).join(" · ");
-  return `<tr><td>${gearRank(name,i)}</td><td>${armor}</td><td>${armor*5}</td>
-    <td>${damage}</td><td>${range}</td><td>${speed}</td><td>${recovery}</td>
-    <td>${reduction}</td><td>${access}</td></tr>`;
-}).join("");
+equipment.forEach((e,i) => {
+  const row = make("tr");
+  const name = coloredName(e[0],i,"");
+  equipmentPalettes[i].forEach((c,j) => name.style.setProperty("--c"+(j+1),c));
+  cell(row,name);
+  for (let j=1;j<=6;j++) cell(row,e[j]);
+  cell(row,e[7] < 0 ? "所有人" : chipList(vips.slice(e[7]).map(v=>v[0])));
+  $("equipmentBody").append(row);
+});
 
-/* 剪贴板：兼容HTTPS与本地打开时的降级复制 */
+/* 复制：兼容HTTPS及本地文件，失败时提供手动复制 */
 let toastTimer;
-function toast(message){
+function toast(message) {
   clearTimeout(toastTimer);
-  $("#toast").textContent=message;
-  $("#toast").hidden=false;
-  toastTimer=setTimeout(()=>{$("#toast").hidden=true;},3000);
+  $("toast").textContent = message;
+  $("toast").hidden = false;
+  toastTimer = setTimeout(() => $("toast").hidden = true,2400);
 }
-async function copyText(text){
-  let copied=false;
-  if(navigator.clipboard && window.isSecureContext){
-    try{await navigator.clipboard.writeText(text);copied=true;}catch{}
-  }
-  if(!copied){
-    const previous=document.activeElement;
-    const area=document.createElement("textarea");
-    area.value=text;area.readOnly=true;
-    area.style.cssText="position:fixed;left:0;top:0;opacity:0;width:1px;height:1px";
-    document.body.append(area);
-    area.focus();area.select();
-    try{copied=document.execCommand("copy");}catch{}
-    area.remove();
-    if(previous instanceof HTMLElement)previous.focus({preventScroll:true});
-  }
-  if(copied){
-    toast("已复制："+text);
-  }else{
-    window.prompt("自动复制未成功，请手动复制以下内容：",text);
-  }
-  return copied;
-}
-document.addEventListener("click",async event=>{
-  const button=event.target.closest("[data-copy]");
-  if(!button)return;
-  const copied=await copyText(button.dataset.copy);
-  if(copied){
-    const original=button.textContent;
-    button.textContent="已复制";
-    setTimeout(()=>{button.textContent=original;},1500);
-  }
-});
-$("#copyGameBind").addEventListener("click",()=>{
-  const qq=$("#qqNumber").value.trim();
-  if(!/^[1-9]\d{4,11}$/.test(qq)){
-    toast("请输入正确的纯数字QQ号");$("#qqNumber").focus();return;
-  }
-  copyText("/绑定 "+qq);
-});
-function copySteamBinding(shortcut){
-  const id=$("#steamId").value.trim();
-  if(!/^\d{17}$/.test(id)){
-    toast("请输入17位数字SteamID");$("#steamId").focus();return;
-  }
-  copyText((shortcut?"bd ":"绑定 ")+id);
-}
-$("#copyQQBind").addEventListener("click",()=>copySteamBinding(false));
-$("#copyQQBindShort").addEventListener("click",()=>copySteamBinding(true));
-
-/* 规则展开与锚点 */
-$("#expandRules").addEventListener("click",()=>$$(".rule").forEach(rule=>rule.open=true));
-$("#collapseRules").addEventListener("click",()=>$$(".rule").forEach(rule=>rule.open=false));
-
-document.addEventListener("click",event=>{
-  const anchor=event.target.closest('a[href^="#"]');
-  if(!anchor)return;
-  const id=anchor.getAttribute("href").slice(1);
-  const target=document.getElementById(id);
-  if(!target)return;
-  event.preventDefault();
-  if(target.matches("details"))target.open=true;
-  if(anchor.closest("#topMenu"))setTopMenu(false);
-  if(narrowScreen.matches && anchor.closest("#sidebar"))setSidebar(false);
-  try{history.pushState(null,"","#"+id);}catch{location.hash=id;}
-  requestAnimationFrame(()=>{
-    target.scrollIntoView({
-      behavior:document.documentElement.classList.contains("no-motion")?"auto":"smooth",
-      block:"start"
-    });
-    if(!target.hasAttribute("tabindex"))target.setAttribute("tabindex","-1");
-    target.focus({preventScroll:true});
-  });
-});
-document.addEventListener("keydown",event=>{
-  if(event.key!=="Escape")return;
-  if(!$("#topMenu").hidden){
-    setTopMenu(false);$("#topToggle").focus();
-  }
-  if(narrowScreen.matches && !$("#sidebar").hidden){
-    setSidebar(false);$("#sideOpen").focus();
-  }
-});
-let scrollScheduled=false;
-function updateActiveLink(){
-  scrollScheduled=false;
-  const offset=$("#siteHeader").offsetHeight+100;
-  let current="home";
-  for(const [id] of navigation){
-    const element=document.getElementById(id);
-    if(element && element.getBoundingClientRect().top<=offset)current=id;
-  }
-  $$("#topLinks a,#sideLinks a").forEach(link=>{
-    const active=link.getAttribute("href")==="#"+current;
-    link.classList.toggle("active",active);
-    if(active)link.setAttribute("aria-current","location");
-    else link.removeAttribute("aria-current");
-  });
-}
-window.addEventListener("scroll",()=>{
-  if(!scrollScheduled){
-    scrollScheduled=true;requestAnimationFrame(updateActiveLink);
-  }
-},{passive:true});
-updateActiveLink();
-
-/* 蓝色星空：只生成一次，使用CSS动画 */
-const starFragment=document.createDocumentFragment();
-const starCount=narrowScreen.matches?48:92;
-for(let i=0;i<starCount;i++){
-  const star=document.createElement("i");
-  star.className="star";
-  star.style.cssText=
-    `left:${Math.random()*100}%;top:${Math.random()*100}%;`+
-    `--size:${1+Math.random()*2.5}px;`+
-    `--duration:${2.5+Math.random()*4}s;--delay:-${Math.random()*8}s`;
-  starFragment.append(star);
-}
-$("#stars").append(starFragment);
-
-const video=$("#backgroundVideo");
-const reducedMotion=matchMedia("(prefers-reduced-motion:reduce)");
-let motionEnabled=readSetting("ark7377-motion",true)!==false;
-let barrageEnabled=readSetting("ark7377-barrage",true)!==false;
-let videoAvailable=true;
-let sparkTimer;
-let playAttempt=0;
-
-let savedBrightness=Number(readSetting("ark7377-brightness",100));
-if(!Number.isFinite(savedBrightness))savedBrightness=100;
-savedBrightness=Math.max(80,Math.min(140,savedBrightness));
-function setBrightness(value){
-  document.documentElement.style.setProperty("--video-brightness",String(value/100));
-  $("#brightness").value=String(value);
-  $("#brightnessValue").textContent=value+"%";
-}
-setBrightness(savedBrightness);
-$("#brightness").addEventListener("input",event=>{
-  const value=Number(event.target.value);
-  setBrightness(value);saveSetting("ark7377-brightness",value);
-});
-
-function spawnSpark(){
-  if($("#starlightLayer").childElementCount>=15)return;
-  const spark=document.createElement("span");
-  spark.className="blue-spark";
-  const patterns=["✦","✧","⋆ ── ✦","✦ · ˚","✧ ─── ⋆","⋆ ✦ ⋆"];
-  spark.textContent=patterns[Math.floor(Math.random()*patterns.length)];
-  spark.style.cssText=
-    `top:${7+Math.random()*83}%;--size:${13+Math.random()*12}px;`+
-    `--duration:${12+Math.random()*10}s;`;
-  spark.addEventListener("animationend",()=>spark.remove(),{once:true});
-  $("#starlightLayer").append(spark);
-}
-function showVideoStatus(text){
-  $("#videoStatus").textContent=text;
-  $("#videoStatus").hidden=!text;
-}
-function syncEffects(){
-  clearInterval(sparkTimer);
-  $("#starlightLayer").replaceChildren();
-  const allowed=motionEnabled&&!reducedMotion.matches;
-  const running=allowed&&!document.hidden;
-  document.documentElement.classList.toggle("no-motion",!running);
-  $("#motionToggle").setAttribute("aria-pressed",String(allowed));
-  $("#motionToggle").disabled=reducedMotion.matches;
-  $("#motionToggle").textContent=reducedMotion.matches?
-    "✦ 系统已减少动态":"✦ 动态："+(allowed?"开":"关");
-  $("#barrageToggle").setAttribute("aria-pressed",String(barrageEnabled));
-  $("#barrageToggle").textContent="✧ 星光弹幕："+(barrageEnabled?"开":"关");
-  $("#barrageToggle").title=allowed?"控制蓝色星光弹幕":"恢复动态后弹幕生效";
-
-  const attempt=++playAttempt;
-  if(running){
-    if(videoAvailable){
-      const promise=video.play();
-      if(promise && promise.catch){
-        promise.then(()=>{
-          if(attempt===playAttempt)showVideoStatus("");
-        }).catch(()=>{
-          if(attempt===playAttempt && videoAvailable)
-            showVideoStatus("视频尚未播放，可点击“动态”关闭后再开启。");
-        });
-      }
+async function copyText(text) {
+  let success = false;
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      success = true;
     }
-    if(barrageEnabled){
-      spawnSpark();
-      sparkTimer=setInterval(spawnSpark,narrowScreen.matches?2300:1500);
-    }
-  }else{
+  } catch (_) {}
+  if (!success) {
+    const field = make("textarea");
+    field.value = text;
+    field.style.cssText = "position:fixed;left:0;top:0;width:1px;height:1px;opacity:0";
+    field.setAttribute("readonly","");
+    document.body.append(field);
+    field.select();
+    try { success = document.execCommand("copy"); } catch (_) {}
+    field.remove();
+  }
+  if (success) toast("已复制：" + text);
+  else {
+    $("manualCopy").value = text;
+    if (!$("copyDialog").open) $("copyDialog").showModal();
+    $("manualCopy").focus();
+    $("manualCopy").select();
+  }
+}
+document.addEventListener("click",e => {
+  const button = e.target.closest("[data-copy]");
+  if (button) copyText(button.dataset.copy);
+});
+
+/* 控制面板与设置记忆 */
+const storageKey = "ark7377-display-v1";
+const reducedMotion = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(storageKey) || "{}") || {}; } catch (_) {}
+const boolSetting = (key,fallback) => typeof saved[key] === "boolean" ? saved[key] : fallback;
+const state = {
+  transparency: Number.isFinite(saved.transparency) ? Math.max(0,Math.min(100,saved.transparency)) : 32,
+  opacityOn:boolSetting("opacityOn",true),
+  flowers:boolSetting("flowers",!reducedMotion),
+  fx:boolSetting("fx",!reducedMotion),
+  wantVideo:boolSetting("wantVideo",!reducedMotion)
+};
+function saveState() {
+  try { localStorage.setItem(storageKey,JSON.stringify(state)); } catch (_) {}
+}
+$("controlToggle").addEventListener("click",() => {
+  const hidden = !$("controlBody").hidden;
+  $("controlBody").hidden = hidden;
+  $("controlToggle").textContent = hidden ? "展开 ▴" : "收起 ▾";
+  $("controlToggle").setAttribute("aria-expanded",String(!hidden));
+});
+function syncOpacity() {
+  document.documentElement.style.setProperty("--video-opacity",state.opacityOn ? 1-state.transparency/100 : 1);
+  $("opacityRange").value = state.transparency;
+  $("opacityRange").disabled = !state.opacityOn;
+  $("opacityValue").textContent = state.opacityOn ? state.transparency+"%" : "0%";
+  $("opacityToggle").textContent = "透明调节：" + (state.opacityOn ? "开" : "关");
+  $("opacityToggle").setAttribute("aria-pressed",String(state.opacityOn));
+}
+$("opacityRange").addEventListener("input",e => {
+  state.transparency = Number(e.target.value);
+  syncOpacity();saveState();
+});
+$("opacityToggle").addEventListener("click",() => {
+  state.opacityOn = !state.opacityOn;syncOpacity();saveState();
+});
+function syncFx() {
+  document.body.classList.toggle("fx-off",!state.fx);
+  $("fxToggle").textContent = "流光特效：" + (state.fx ? "开" : "关");
+  $("fxToggle").setAttribute("aria-pressed",String(state.fx));
+}
+$("fxToggle").addEventListener("click",() => {
+  state.fx = !state.fx;syncFx();saveState();
+});
+
+/* 视频：根据实际播放状态更新按钮 */
+const video = $("bgVideo");
+video.muted = true;
+let mediaFailed = false;
+function syncVideoButton() {
+  $("playToggle").textContent = video.paused ? "▶ 播放视频" : "Ⅱ 暂停视频";
+}
+async function playVideo() {
+  if (document.hidden || !state.wantVideo) return;
+  if (mediaFailed) {
+    mediaFailed = false;
+    video.load();
+  }
+  $("videoStatus").textContent = "正在加载山水视频…";
+  try {
+    await video.play();
+    if (!state.wantVideo || document.hidden) video.pause();
+  } catch (error) {
+    if (error.name === "AbortError") return;
+    $("videoStatus").textContent = mediaFailed
+      ? "视频不可用，当前显示静态背景。"
+      : "视频未能播放，可点击播放重试。";
+  }
+  syncVideoButton();
+}
+video.addEventListener("playing",() => {
+  $("videoStatus").textContent = "山水视频播放中 · 静音循环";
+  syncVideoButton();
+});
+video.addEventListener("pause",() => {
+  syncVideoButton();
+  if (!mediaFailed) $("videoStatus").textContent = "视频已暂停 · 保留山水画面";
+});
+video.addEventListener("waiting",() => {
+  if (state.wantVideo) $("videoStatus").textContent = "山水视频缓冲中…";
+});
+function videoError() {
+  mediaFailed = true;
+  $("videoStatus").textContent = "视频不可用，当前显示静态背景。";
+  syncVideoButton();
+}
+video.addEventListener("error",videoError);
+video.querySelector("source").addEventListener("error",videoError);
+$("playToggle").addEventListener("click",() => {
+  if (!video.paused) {
+    state.wantVideo = false;
     video.pause();
+  } else {
+    state.wantVideo = true;
+    playVideo();
   }
-}
-$("#motionToggle").addEventListener("click",()=>{
-  motionEnabled=!motionEnabled;
-  saveSetting("ark7377-motion",motionEnabled);syncEffects();
+  saveState();
 });
-$("#barrageToggle").addEventListener("click",()=>{
-  barrageEnabled=!barrageEnabled;
-  saveSetting("ark7377-barrage",barrageEnabled);syncEffects();
-});
-function hideUnavailableVideo(){
-  videoAvailable=false;video.hidden=true;
-  showVideoStatus("背景控制。");
-}
-video.addEventListener("error",hideUnavailableVideo);
-video.querySelector("source").addEventListener("error",hideUnavailableVideo);
-if(video.error)hideUnavailableVideo();
-document.addEventListener("visibilitychange",syncEffects);
-if(reducedMotion.addEventListener){
-  reducedMotion.addEventListener("change",syncEffects);
-}else{
-  reducedMotion.addListener(syncEffects);
-}
-syncEffects();
 
-function followInitialHash(){
-  if(!location.hash)return;
-  let id;
-  try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}
-  const target=document.getElementById(id);
-  if(target){
-    if(target.matches("details"))target.open=true;
-    requestAnimationFrame(()=>target.scrollIntoView({behavior:"auto",block:"start"}));
-  }
+/* 鲜花欢迎弹幕：限量生成，避开中部主要阅读区 */
+const greetings = [
+  "🌸 花开有时，相逢有你 · 欢迎来到7377",
+  "🌷 加入7377，共赴方舟的山海之约",
+  "🌺 一路繁花相送，愿你驯龙有成",
+  "🌼 山水有相逢，方舟有故人",
+  "💐 欢迎新伙伴，愿每次冒险都有惊喜",
+  "💎 墨染山河，与你共赏方舟风华",
+  "🌹 愿你有家可归，有龙相伴",
+  "🏵️ 来7377，与同伴书写生存传奇",
+  "🦖🌸 跨越山海，与巨兽并肩同行",
+  "🌻 欢迎回家，7377因你而精彩"
+  "👑 好玩爱玩还想玩，就是这个味~"
+];
+let flowerTimer = null;
+let greetingIndex = 0;
+let flowerLane = 0;
+function spawnFlower() {
+  if (!state.flowers || document.hidden || $("flowers").childElementCount >= 4) return;
+  const item = make("div","flower-message",greetings[greetingIndex++ % greetings.length]);
+  const lanes = [17,84,25,76];
+  item.style.top = lanes[flowerLane++ % lanes.length]+"%";
+  item.style.animationDuration = (18+Math.random()*5)+"s";
+  item.addEventListener("animationend",() => item.remove(),{once:true});
+  $("flowers").append(item);
 }
-window.addEventListener("hashchange",followInitialHash);
-followInitialHash();
+function syncFlowers() {
+  if (flowerTimer) clearInterval(flowerTimer);
+  flowerTimer = null;
+  $("flowerToggle").textContent = "鲜花弹幕：" + (state.flowers ? "开" : "关");
+  $("flowerToggle").setAttribute("aria-pressed",String(state.flowers));
+  if (!state.flowers || document.hidden) {
+    $("flowers").replaceChildren();
+    return;
+  }
+  spawnFlower();
+  flowerTimer = setInterval(spawnFlower,6800);
+}
+$("flowerToggle").addEventListener("click",() => {
+  state.flowers = !state.flowers;
+  syncFlowers();saveState();
+});
+document.addEventListener("visibilitychange",() => {
+  if (document.hidden) {
+    video.pause();
+    syncFlowers();
+  } else {
+    if (state.wantVideo) playVideo();
+    syncFlowers();
+  }
+});
+
+syncOpacity();
+syncFx();
+syncFlowers();
+if (state.wantVideo) playVideo();
+else {
+  $("videoStatus").textContent = "静态山水模式 · 可点击播放视频";
+  syncVideoButton();
+}
 </script>
 </body>
 </html>
